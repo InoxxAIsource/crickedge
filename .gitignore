@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.pythonlibs/
+.upm/
+.cache/
+.config/
+.local/
+*.egg-info/
+venv/

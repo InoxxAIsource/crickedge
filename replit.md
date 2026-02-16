@@ -15,6 +15,7 @@ scripts/
   build_metadata.py
   build_powerplay_summary.py
   build_over_state_snapshots.py
+  build_elo_ratings.py
 ```
 
 ## Scripts
@@ -42,5 +43,14 @@ scripts/
 - Cricsheet JSON format: keys are meta, info, innings
 - Overs are 0-indexed in source (over 0 = first over); outputs use 1-indexed over_number
 
+### build_elo_ratings.py
+- Reads match_metadata.csv, sorts by date, computes Elo ratings chronologically
+- K-factor=20, initial rating=1500, standard Elo formula
+- No future leakage: pre-match ratings recorded before update
+- Output: data/processed/elo_ratings_history.csv (per-match ratings history)
+- Output: data/processed/current_team_ratings.csv (final standings)
+- Note: franchise renames (e.g. Royal Challengers Bangalore → Bengaluru) appear as separate teams in source data
+
 ## Recent Changes
+- 2026-02-16: Phase 2 — Elo rating system built
 - 2026-02-16: Initial data engineering foundation built (Phase 1)

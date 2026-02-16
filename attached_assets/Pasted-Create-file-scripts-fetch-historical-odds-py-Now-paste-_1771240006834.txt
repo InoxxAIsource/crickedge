@@ -1,0 +1,253 @@
+Create file:
+
+/scripts/fetch_historical_odds.py
+
+
+Now paste this prompt into Replit AI Agent:
+
+Phase 7: Fetch Historical IPL Closing Odds (Match Winner Only)
+
+We need to pull historical IPL match winner (h2h) odds
+from The Odds API v4 historical endpoint.
+
+Requirements:
+
+1. Use endpoint:
+   /v4/historical/sports/cricket_ipl/odds
+
+2. For each IPL match in match_metadata.csv:
+   - Use match date (convert to ISO 8601 format)
+   - Fetch h2h market
+   - Use decimal odds
+   - Use one region only (e.g., uk)
+   - Use one bookmaker only (first available)
+
+3. Extract:
+   - match_id
+   - team_1
+   - team_2
+   - bookmaker_name
+   - team_1_odds
+   - team_2_odds
+   - snapshot_timestamp
+
+4. Handle:
+   - Missing odds (skip safely)
+   - API rate limits (sleep between calls)
+   - HTTP errors
+
+5. Save output as:
+   data/processed/historical_odds_raw.csv
+
+6. Print:
+   - Total matches attempted
+   - Total matches with odds found
+   - Total skipped
+
+🧠 After Script Is Generated
+
+You will:
+
+Add your API key at top of file.
+
+Run script.
+
+Expect only matches from 2020 onward to return data.
+
+Likely you will get:
+
+~2020–2024 IPL seasons.
+
+That’s enough for real edge test.
+
+🎯 STEP 2 — Clean & Normalize Odds
+
+After fetching, we must:
+
+Convert decimal → implied probability
+
+Remove bookmaker margin (overround normalization)
+
+Next prompt (do NOT run yet):
+
+Phase 7.2: Normalize Historical Odds
+
+Using historical_odds_raw.csv:
+
+1. Convert decimal odds to implied probability:
+   implied_prob = 1 / decimal_odds
+
+2. Normalize probabilities:
+   normalized_prob = implied_prob / sum(implied_probs)
+
+3. Add:
+   team_1_market_prob
+   team_2_market_prob
+   market_overround
+
+4. Save as:
+   data/processed/historical_odds_normalized.csv
+
+🎯 STEP 3 — Merge Odds Into Metadata
+
+After normalization:
+
+Phase 7.3: Merge Historical Odds Into Metadata
+
+1. Merge historical_odds_normalized.csv
+   with match_metadata.csv
+   using:
+       match date
+       normalized team names
+
+2. Save:
+   data/processed/match_metadata_with_odds.csv
+
+3. Print:
+   Total matches with odds available
+
+🎯 STEP 4 — Edge Simulation Engine
+
+Then we simulate:
+
+For each match (2020+):
+
+If:
+Model pre-match probability − Market implied probability ≥ threshold
+
+Simulate 1 unit bet.
+
+Track:
+
+ROI
+Win rate
+Max drawdown
+Trade count
+
+Test thresholds:
+
+3%
+5%
+7%
+10%
+
+🧠 Important Discipline
+
+We use:
+
+Closing odds only.
+Single bookmaker.
+No cherry picking best price.
+
+Be honest.
+
+🚨 Now Before You Run Anything
+
+Answer this:
+
+Do you want to:
+
+A) Use one fixed bookmaker for validation
+or
+B) Use average of all bookmakers?
+
+Using best bookmaker artificially inflates ROI.
+
+Professional approach = one fixed bookmaker.
+
+What’s your call?
+
+one fixed bookmaker.
+
+Excellent.
+That is the correct professional choice.
+
+One fixed bookmaker = clean validation.
+
+No cherry-picking.
+No best-price illusion.
+No inflated ROI.
+
+Now we execute properly.
+
+🎯 Strategy: Fixed Bookmaker Validation
+
+We will:
+
+Pull historical IPL closing odds.
+
+Select ONE bookmaker consistently.
+
+Use that bookmaker for ALL backtests.
+
+Normalize probabilities.
+
+Simulate edge.
+
+Measure ROI honestly.
+
+🧠 Which Bookmaker?
+
+You should choose one that:
+
+• Appears consistently in IPL historical data
+• Has good coverage since 2020
+• Is reputable
+
+Common stable choices:
+
+Bet365
+
+Pinnacle
+
+William Hill
+
+I suggest:
+
+👉 Pinnacle (if available)
+
+Why?
+
+Sharp bookmaker
+
+Lower margin
+
+Hardest to beat
+
+Most realistic benchmark
+
+If you can beat Pinnacle closing,
+you have real edge.
+
+🚀 Update Your Odds Fetch Script Prompt
+
+Modify previous prompt to enforce fixed bookmaker.
+
+Paste this into Replit:
+
+Update Phase 7 Script:
+
+1. When fetching historical odds:
+   - Only keep bookmaker: "Pinnacle"
+   - If Pinnacle not available for a match:
+       skip that match
+
+2. Extract only Pinnacle odds for:
+   - team_1
+   - team_2
+
+3. Print:
+   - Matches with Pinnacle odds
+   - Matches skipped due to missing Pinnacle
+
+⚠️ Important API Credit Discipline
+
+Do NOT:
+
+Call per over.
+
+Call per match only.
+
+For each match:
+Use match date at 23:59 UTC
+to simulate closing odds snapshot.

@@ -51,17 +51,28 @@ def run_simulation(matches, model_probs, threshold):
             continue
 
         mp = model_probs[mid]
+        meta_t1 = match["team_1"]
+        meta_t2 = match["team_2"]
 
-        t1_edge = mp["exp_win_1"] - t1_market
-        t2_edge = mp["exp_win_2"] - t2_market
+        if mp["team_1"] == meta_t1 and mp["team_2"] == meta_t2:
+            model_prob_t1 = mp["exp_win_1"]
+            model_prob_t2 = mp["exp_win_2"]
+        elif mp["team_1"] == meta_t2 and mp["team_2"] == meta_t1:
+            model_prob_t1 = mp["exp_win_2"]
+            model_prob_t2 = mp["exp_win_1"]
+        else:
+            continue
+
+        t1_edge = model_prob_t1 - t1_market
+        t2_edge = model_prob_t2 - t2_market
 
         bet_team = None
         bet_odds = None
         if t1_edge >= threshold and t1_edge >= t2_edge:
-            bet_team = mp["team_1"]
+            bet_team = meta_t1
             bet_odds = t1_odds
         elif t2_edge >= threshold:
-            bet_team = mp["team_2"]
+            bet_team = meta_t2
             bet_odds = t2_odds
 
         if bet_team is None:

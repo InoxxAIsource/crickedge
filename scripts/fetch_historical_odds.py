@@ -1,4 +1,5 @@
 import csv
+import json
 import os
 import sys
 import time
@@ -8,14 +9,15 @@ import requests
 PROCESSED_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "processed")
 METADATA_PATH = os.path.join(PROCESSED_DIR, "match_metadata.csv")
 OUTPUT_PATH = os.path.join(PROCESSED_DIR, "historical_odds_raw.csv")
+DATES_CACHE_PATH = os.path.join(PROCESSED_DIR, "odds_fetch_dates_done.json")
 
 API_KEY = os.environ.get("ODDS_API_KEY", "")
 BASE_URL = "https://api.the-odds-api.com/v4/historical/sports/cricket_ipl/odds"
 BOOKMAKER = "pinnacle"
-REGION = "uk"
+REGION = "eu"
 MARKET = "h2h"
 ODDS_FORMAT = "decimal"
-SLEEP_BETWEEN_CALLS = 1.0
+SLEEP_BETWEEN_CALLS = 0.5
 
 OUTPUT_FIELDS = [
     "match_id", "date", "team_1", "team_2",
@@ -39,8 +41,29 @@ def load_matches(filepath):
         return list(csv.DictReader(f))
 
 
+def load_existing_results():
+    if not os.path.exists(OUTPUT_PATH):
+        return set(), []
+    with open(OUTPUT_PATH, "r", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    existing_ids = {r["match_id"] for r in rows}
+    return existing_ids, rows
+
+
+def load_dates_done():
+    if not os.path.exists(DATES_CACHE_PATH):
+        return set()
+    with open(DATES_CACHE_PATH, "r") as f:
+        return set(json.load(f))
+
+
+def save_dates_done(dates_done):
+    with open(DATES_CACHE_PATH, "w") as f:
+        json.dump(sorted(dates_done), f)
+
+
 def fetch_odds_for_date(date_str):
-    snapshot_time = f"{date_str}T23:59:59Z"
+    snapshot_time = f"{date_str}T13:30:00Z"
     params = {
         "apiKey": API_KEY,
         "regions": REGION,
@@ -79,6 +102,13 @@ def find_pinnacle_odds(events_data, team_1, team_2):
     return None, None, None
 
 
+def save_rows(rows):
+    with open(OUTPUT_PATH, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=OUTPUT_FIELDS)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def fetch_historical_odds():
     if not API_KEY:
         print("ERROR: ODDS_API_KEY environment variable not set.", file=sys.stderr)
@@ -90,84 +120,91 @@ def fetch_historical_odds():
     matches_2020_plus = [m for m in matches if m["date"] >= "2020-01-01"]
     matches_2020_plus.sort(key=lambda m: m["date"])
 
-    unique_dates = sorted(set(m["date"] for m in matches_2020_plus))
+    existing_ids, rows = load_existing_results()
+    dates_done = load_dates_done()
+
+    all_dates = sorted(set(m["date"] for m in matches_2020_plus))
+    remaining_dates = sorted(set(all_dates) - dates_done)
 
     print(f"\n=== fetch_historical_odds.py ===")
     print(f"  Total matches (2020+)      : {len(matches_2020_plus)}")
-    print(f"  Unique match dates         : {len(unique_dates)}")
+    print(f"  Total unique dates         : {len(all_dates)}")
+    print(f"  Already fetched (matches)  : {len(existing_ids)}")
+    print(f"  Dates already processed    : {len(dates_done)}")
+    print(f"  Remaining dates to fetch   : {len(remaining_dates)}")
     print(f"  Bookmaker filter           : {BOOKMAKER}")
 
-    date_cache = {}
-    rows = []
-    found = 0
+    if not remaining_dates:
+        print("  All dates already fetched. Nothing to do.")
+        return rows
+
+    found_this_run = 0
     skipped_no_pinnacle = 0
     skipped_no_match = 0
     api_errors = 0
     api_calls = 0
 
-    for match in matches_2020_plus:
-        date_str = match["date"]
-        team_1 = match["team_1"]
-        team_2 = match["team_2"]
-        match_id = match["match_id"]
+    for date_str in remaining_dates:
+        try:
+            data, snapshot_ts = fetch_odds_for_date(date_str)
+            events_data = data.get("data", [])
+            api_calls += 1
+            print(f"  API call #{api_calls}: date={date_str} events={len(events_data)}")
+            time.sleep(SLEEP_BETWEEN_CALLS)
+        except requests.exceptions.HTTPError as e:
+            print(f"  HTTP error for date {date_str}: {e}", file=sys.stderr)
+            api_errors += 1
+            time.sleep(SLEEP_BETWEEN_CALLS)
+            continue
+        except Exception as e:
+            print(f"  Error for date {date_str}: {e}", file=sys.stderr)
+            api_errors += 1
+            time.sleep(SLEEP_BETWEEN_CALLS)
+            continue
 
-        if date_str not in date_cache:
-            try:
-                data, snapshot_ts = fetch_odds_for_date(date_str)
-                date_cache[date_str] = (data.get("data", []), snapshot_ts)
-                api_calls += 1
-                remaining = "?"
-                print(f"  API call #{api_calls}: date={date_str} "
-                      f"events={len(date_cache[date_str][0])} "
-                      f"credits_remaining={remaining}")
-                time.sleep(SLEEP_BETWEEN_CALLS)
-            except requests.exceptions.HTTPError as e:
-                print(f"  HTTP error for date {date_str}: {e}", file=sys.stderr)
-                date_cache[date_str] = ([], "")
-                api_errors += 1
-                time.sleep(SLEEP_BETWEEN_CALLS)
-                continue
-            except Exception as e:
-                print(f"  Error for date {date_str}: {e}", file=sys.stderr)
-                date_cache[date_str] = ([], "")
-                api_errors += 1
-                time.sleep(SLEEP_BETWEEN_CALLS)
-                continue
+        date_matches = [m for m in matches_2020_plus
+                        if m["date"] == date_str and m["match_id"] not in existing_ids]
 
-        events_data, snapshot_ts = date_cache[date_str]
-        bm_name, t1_odds, t2_odds = find_pinnacle_odds(events_data, team_1, team_2)
+        for match in date_matches:
+            team_1 = match["team_1"]
+            team_2 = match["team_2"]
+            match_id = match["match_id"]
 
-        if t1_odds is not None and t2_odds is not None:
-            rows.append({
-                "match_id": match_id,
-                "date": date_str,
-                "team_1": team_1,
-                "team_2": team_2,
-                "bookmaker_name": bm_name,
-                "team_1_odds": t1_odds,
-                "team_2_odds": t2_odds,
-                "snapshot_timestamp": snapshot_ts,
-            })
-            found += 1
-        else:
-            if events_data:
-                skipped_no_pinnacle += 1
+            bm_name, t1_odds, t2_odds = find_pinnacle_odds(events_data, team_1, team_2)
+
+            if t1_odds is not None and t2_odds is not None:
+                row = {
+                    "match_id": match_id,
+                    "date": date_str,
+                    "team_1": team_1,
+                    "team_2": team_2,
+                    "bookmaker_name": bm_name,
+                    "team_1_odds": t1_odds,
+                    "team_2_odds": t2_odds,
+                    "snapshot_timestamp": snapshot_ts,
+                }
+                rows.append(row)
+                existing_ids.add(match_id)
+                found_this_run += 1
             else:
-                skipped_no_match += 1
+                if events_data:
+                    skipped_no_pinnacle += 1
+                else:
+                    skipped_no_match += 1
 
-    with open(OUTPUT_PATH, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=OUTPUT_FIELDS)
-        writer.writeheader()
-        writer.writerows(rows)
+        dates_done.add(date_str)
+        save_rows(rows)
+        save_dates_done(dates_done)
 
     print(f"\n  Results:")
-    print(f"    Total matches attempted     : {len(matches_2020_plus)}")
-    print(f"    Matches with Pinnacle odds  : {found}")
-    print(f"    Skipped (no Pinnacle)       : {skipped_no_pinnacle}")
-    print(f"    Skipped (no match data)     : {skipped_no_match}")
-    print(f"    API errors                  : {api_errors}")
-    print(f"    API calls made              : {api_calls}")
-    print(f"    Output                      : {OUTPUT_PATH}")
+    print(f"    Total matches with Pinnacle odds  : {len(rows)}")
+    print(f"    Found this run                    : {found_this_run}")
+    print(f"    Skipped (no Pinnacle)             : {skipped_no_pinnacle}")
+    print(f"    Skipped (no match data)           : {skipped_no_match}")
+    print(f"    API errors                        : {api_errors}")
+    print(f"    API calls made (this run)         : {api_calls}")
+    print(f"    Dates processed total             : {len(dates_done)}")
+    print(f"    Output                            : {OUTPUT_PATH}")
 
     return rows
 

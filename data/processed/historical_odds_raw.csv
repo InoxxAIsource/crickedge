@@ -1,0 +1,342 @@
+match_id,date,team_1,team_2,bookmaker_name,team_1_odds,team_2_odds,snapshot_timestamp
+1216534,2020-09-21,Royal Challengers Bengaluru,Sunrisers Hyderabad,Pinnacle,2.05,1.86,2020-09-21T13:30:00Z
+1216508,2020-09-23,Mumbai Indians,Kolkata Knight Riders,Pinnacle,1.76,2.2,2020-09-23T13:30:00Z
+1216510,2020-09-24,Punjab Kings,Royal Challengers Bengaluru,Pinnacle,2.22,1.74,2020-09-24T13:30:00Z
+1216545,2020-09-26,Sunrisers Hyderabad,Kolkata Knight Riders,Pinnacle,1.92,1.99,2020-09-26T13:30:00Z
+1216527,2020-09-27,Punjab Kings,Rajasthan Royals,Pinnacle,1.96,1.94,2020-09-27T13:30:00Z
+1216532,2020-09-29,Sunrisers Hyderabad,Delhi Capitals,Pinnacle,2.1,1.83,2020-09-29T13:30:00Z
+1216515,2020-10-03,Delhi Capitals,Kolkata Knight Riders,Pinnacle,1.86,2.05,2020-10-03T13:30:00Z
+1216542,2020-10-08,Sunrisers Hyderabad,Punjab Kings,Pinnacle,1.89,2.02,2020-10-08T13:30:00Z
+1216529,2020-10-11,Delhi Capitals,Mumbai Indians,Pinnacle,2.13,1.8,2020-10-11T13:30:00Z
+1216528,2020-10-13,Chennai Super Kings,Sunrisers Hyderabad,Pinnacle,1.87,2.04,2020-10-13T13:30:00Z
+1216543,2020-10-14,Delhi Capitals,Rajasthan Royals,Pinnacle,1.75,2.2,2020-10-14T13:30:00Z
+1216531,2020-10-15,Royal Challengers Bengaluru,Punjab Kings,Pinnacle,1.78,2.17,2020-10-15T13:30:00Z
+1216526,2020-10-16,Kolkata Knight Riders,Mumbai Indians,Pinnacle,2.25,1.72,2020-10-16T13:30:00Z
+1216509,2020-10-17,Chennai Super Kings,Delhi Capitals,Pinnacle,2.09,1.83,2020-10-17T13:30:00Z
+1216533,2020-10-19,Chennai Super Kings,Rajasthan Royals,Pinnacle,1.87,2.05,2020-10-19T13:30:00Z
+1216546,2020-10-20,Delhi Capitals,Punjab Kings,Pinnacle,1.79,2.14,2020-10-20T13:30:00Z
+1216494,2020-10-21,Kolkata Knight Riders,Royal Challengers Bengaluru,Pinnacle,2.14,1.79,2020-10-21T13:30:00Z
+1216518,2020-10-22,Rajasthan Royals,Sunrisers Hyderabad,Pinnacle,1.96,1.94,2020-10-22T13:30:00Z
+1216521,2020-10-23,Chennai Super Kings,Mumbai Indians,Pinnacle,2.38,1.65,2020-10-23T13:30:00Z
+1216498,2020-10-24,Punjab Kings,Sunrisers Hyderabad,Pinnacle,1.85,2.07,2020-10-24T13:30:00Z
+1216541,2020-10-25,Mumbai Indians,Rajasthan Royals,Pinnacle,1.65,2.39,2020-10-25T13:30:00Z
+1216520,2020-10-26,Kolkata Knight Riders,Punjab Kings,Pinnacle,1.9,2.0,2020-10-26T13:30:00Z
+1216524,2020-10-27,Sunrisers Hyderabad,Delhi Capitals,Pinnacle,2.19,1.76,2020-10-27T13:30:00Z
+1216499,2020-10-28,Royal Challengers Bengaluru,Mumbai Indians,Pinnacle,2.23,1.74,2020-10-28T13:30:00Z
+1216536,2020-10-29,Kolkata Knight Riders,Chennai Super Kings,Pinnacle,1.72,2.25,2020-10-29T13:30:00Z
+1216537,2020-10-30,Punjab Kings,Rajasthan Royals,Pinnacle,1.84,2.08,2020-10-30T13:30:00Z
+1216502,2020-10-31,Royal Challengers Bengaluru,Sunrisers Hyderabad,Pinnacle,1.81,2.12,2020-10-31T13:30:00Z
+1216530,2020-11-01,Kolkata Knight Riders,Rajasthan Royals,Pinnacle,2.0,1.9,2020-11-01T13:30:00Z
+1216505,2020-11-02,Royal Challengers Bengaluru,Delhi Capitals,Pinnacle,1.83,2.1,2020-11-02T13:30:00Z
+1216495,2020-11-03,Mumbai Indians,Sunrisers Hyderabad,Pinnacle,1.89,2.02,2020-11-03T13:30:00Z
+1237177,2020-11-05,Mumbai Indians,Delhi Capitals,Pinnacle,1.67,2.35,2020-11-05T13:30:00Z
+1237178,2020-11-06,Royal Challengers Bengaluru,Sunrisers Hyderabad,Pinnacle,2.03,1.88,2020-11-06T13:30:00Z
+1237180,2020-11-08,Delhi Capitals,Sunrisers Hyderabad,Pinnacle,2.06,1.86,2020-11-08T13:30:00Z
+1237181,2020-11-10,Delhi Capitals,Mumbai Indians,Pinnacle,2.39,1.65,2020-11-10T13:30:00Z
+1254058,2021-04-09,Mumbai Indians,Royal Challengers Bengaluru,Pinnacle,1.68,2.32,2021-04-09T13:30:00Z
+1254060,2021-04-11,Kolkata Knight Riders,Sunrisers Hyderabad,Pinnacle,2.14,1.79,2021-04-11T13:30:00Z
+1254061,2021-04-12,Punjab Kings,Rajasthan Royals,Pinnacle,1.85,2.07,2021-04-12T13:30:00Z
+1254062,2021-04-13,Mumbai Indians,Kolkata Knight Riders,Pinnacle,1.66,2.36,2021-04-13T13:30:00Z
+1254063,2021-04-14,Royal Challengers Bengaluru,Sunrisers Hyderabad,Pinnacle,1.89,2.02,2021-04-14T13:30:00Z
+1254064,2021-04-15,Delhi Capitals,Rajasthan Royals,Pinnacle,1.71,2.28,2021-04-15T13:30:00Z
+1254065,2021-04-16,Punjab Kings,Chennai Super Kings,Pinnacle,1.93,1.98,2021-04-16T13:30:00Z
+1254066,2021-04-17,Mumbai Indians,Sunrisers Hyderabad,Pinnacle,1.67,2.35,2021-04-17T13:30:00Z
+1254068,2021-04-18,Punjab Kings,Delhi Capitals,Pinnacle,2.19,1.76,2021-04-18T13:30:00Z
+1254070,2021-04-20,Mumbai Indians,Delhi Capitals,Pinnacle,1.69,2.3,2021-04-20T13:30:00Z
+1254072,2021-04-21,Chennai Super Kings,Kolkata Knight Riders,Pinnacle,1.86,2.05,2021-04-21T13:30:00Z
+1254073,2021-04-22,Rajasthan Royals,Royal Challengers Bengaluru,Pinnacle,2.23,1.74,2021-04-22T13:30:00Z
+1254074,2021-04-23,Mumbai Indians,Punjab Kings,Pinnacle,1.64,2.42,2021-04-23T13:30:00Z
+1254075,2021-04-24,Kolkata Knight Riders,Rajasthan Royals,Pinnacle,1.77,2.18,2021-04-24T13:30:00Z
+1254078,2021-04-26,Punjab Kings,Kolkata Knight Riders,Pinnacle,1.9,2.01,2021-04-26T13:30:00Z
+1254079,2021-04-27,Royal Challengers Bengaluru,Delhi Capitals,Pinnacle,1.89,2.01,2021-04-27T13:30:00Z
+1254080,2021-04-28,Sunrisers Hyderabad,Chennai Super Kings,Pinnacle,2.22,1.74,2021-04-28T13:30:00Z
+1254081,2021-04-29,Rajasthan Royals,Mumbai Indians,Pinnacle,7.91,1.07,2021-04-29T13:30:00Z
+1254082,2021-04-29,Kolkata Knight Riders,Delhi Capitals,Pinnacle,2.21,1.75,2021-04-29T13:30:00Z
+1254083,2021-04-30,Punjab Kings,Royal Challengers Bengaluru,Pinnacle,2.38,1.66,2021-04-30T13:30:00Z
+1254084,2021-05-01,Chennai Super Kings,Mumbai Indians,Pinnacle,2.29,1.7,2021-05-01T13:30:00Z
+1254086,2021-05-02,Punjab Kings,Delhi Capitals,Pinnacle,2.68,1.53,2021-05-02T13:30:00Z
+1254104,2021-09-19,Chennai Super Kings,Mumbai Indians,Pinnacle,2.31,1.69,2021-09-19T13:30:00Z
+1254087,2021-09-20,Royal Challengers Bengaluru,Kolkata Knight Riders,Pinnacle,1.71,2.28,2021-09-20T13:30:00Z
+1254111,2021-09-21,Rajasthan Royals,Punjab Kings,Pinnacle,2.17,1.78,2021-09-21T13:30:00Z
+1254105,2021-09-22,Sunrisers Hyderabad,Delhi Capitals,Pinnacle,2.37,1.66,2021-09-22T13:30:00Z
+1254096,2021-09-23,Mumbai Indians,Kolkata Knight Riders,Pinnacle,1.78,2.17,2021-09-23T13:30:00Z
+1254113,2021-09-24,Royal Challengers Bengaluru,Chennai Super Kings,Pinnacle,2.09,1.83,2021-09-24T13:30:00Z
+1254107,2021-09-25,Punjab Kings,Sunrisers Hyderabad,Pinnacle,1.81,2.12,2021-09-25T13:30:00Z
+1254108,2021-09-26,Royal Challengers Bengaluru,Mumbai Indians,Pinnacle,2.19,1.76,2021-09-26T13:30:00Z
+1254100,2021-09-27,Rajasthan Royals,Sunrisers Hyderabad,Pinnacle,1.71,2.27,2021-09-27T13:30:00Z
+1254099,2021-09-28,Punjab Kings,Mumbai Indians,Pinnacle,2.44,1.62,2021-09-28T13:30:00Z
+1254103,2021-09-29,Rajasthan Royals,Royal Challengers Bengaluru,Pinnacle,2.2,1.76,2021-09-29T13:30:00Z
+1254091,2021-09-30,Sunrisers Hyderabad,Chennai Super Kings,Pinnacle,2.33,1.68,2021-09-30T13:30:00Z
+1254102,2021-10-01,Kolkata Knight Riders,Punjab Kings,Pinnacle,1.68,2.32,2021-10-01T13:30:00Z
+1254089,2021-10-02,Chennai Super Kings,Rajasthan Royals,Pinnacle,1.72,2.25,2021-10-02T13:30:00Z
+1254109,2021-10-03,Sunrisers Hyderabad,Kolkata Knight Riders,Pinnacle,2.41,1.64,2021-10-03T13:30:00Z
+1254110,2021-10-04,Chennai Super Kings,Delhi Capitals,Pinnacle,1.82,2.1,2021-10-04T13:30:00Z
+1254093,2021-10-05,Rajasthan Royals,Mumbai Indians,Pinnacle,2.36,1.66,2021-10-05T13:30:00Z
+1254095,2021-10-06,Sunrisers Hyderabad,Royal Challengers Bengaluru,Pinnacle,2.64,1.55,2021-10-06T13:30:00Z
+1254106,2021-10-07,Kolkata Knight Riders,Rajasthan Royals,Pinnacle,1.66,2.37,2021-10-07T13:30:00Z
+1254088,2021-10-08,Mumbai Indians,Sunrisers Hyderabad,Pinnacle,1.56,2.59,2021-10-08T13:30:00Z
+1254101,2021-10-08,Delhi Capitals,Royal Challengers Bengaluru,Pinnacle,1.98,1.92,2021-10-08T13:30:00Z
+1254114,2021-10-10,Delhi Capitals,Chennai Super Kings,Pinnacle,1.99,1.91,2021-10-10T13:30:00Z
+1254115,2021-10-11,Royal Challengers Bengaluru,Kolkata Knight Riders,Pinnacle,1.94,1.96,2021-10-11T13:30:00Z
+1254116,2021-10-13,Delhi Capitals,Kolkata Knight Riders,Pinnacle,2.0,1.91,2021-10-13T13:30:00Z
+1254117,2021-10-15,Chennai Super Kings,Kolkata Knight Riders,Pinnacle,1.93,1.97,2021-10-15T13:30:00Z
+1304047,2022-03-26,Chennai Super Kings,Kolkata Knight Riders,Pinnacle,1.83,1.96,2022-03-26T13:30:00Z
+1304048,2022-03-27,Mumbai Indians,Delhi Capitals,Pinnacle,1.74,2.21,2022-03-27T13:30:00Z
+1304049,2022-03-27,Royal Challengers Bengaluru,Punjab Kings,Pinnacle,1.8,2.0,2022-03-27T13:30:00Z
+1304050,2022-03-28,Lucknow Super Giants,Gujarat Titans,Pinnacle,2.25,1.71,2022-03-28T13:30:00Z
+1304051,2022-03-29,Rajasthan Royals,Sunrisers Hyderabad,Pinnacle,1.64,2.38,2022-03-29T13:30:00Z
+1304052,2022-03-30,Kolkata Knight Riders,Royal Challengers Bengaluru,Pinnacle,2.17,1.76,2022-03-30T13:30:00Z
+1304053,2022-03-31,Chennai Super Kings,Lucknow Super Giants,Pinnacle,1.77,2.11,2022-03-31T13:30:00Z
+1304054,2022-04-01,Punjab Kings,Kolkata Knight Riders,Pinnacle,1.76,2.13,2022-04-01T13:30:00Z
+1304055,2022-04-02,Rajasthan Royals,Mumbai Indians,Pinnacle,2.19,1.68,2022-04-02T13:30:00Z
+1304056,2022-04-02,Gujarat Titans,Delhi Capitals,Pinnacle,1.93,1.81,2022-04-02T13:30:00Z
+1304057,2022-04-03,Punjab Kings,Chennai Super Kings,Pinnacle,1.98,1.88,2022-04-03T13:30:00Z
+1304058,2022-04-04,Lucknow Super Giants,Sunrisers Hyderabad,Pinnacle,1.65,2.32,2022-04-04T13:30:00Z
+1304059,2022-04-05,Rajasthan Royals,Royal Challengers Bengaluru,Pinnacle,2.01,1.88,2022-04-05T13:30:00Z
+1304060,2022-04-06,Mumbai Indians,Kolkata Knight Riders,Pinnacle,1.75,2.14,2022-04-06T13:30:00Z
+1304061,2022-04-07,Delhi Capitals,Lucknow Super Giants,Pinnacle,1.79,2.08,2022-04-07T13:30:00Z
+1304062,2022-04-08,Punjab Kings,Gujarat Titans,Pinnacle,1.92,1.93,2022-04-08T13:30:00Z
+1304063,2022-04-09,Chennai Super Kings,Sunrisers Hyderabad,Pinnacle,1.79,2.04,2022-04-09T13:30:00Z
+1304064,2022-04-09,Mumbai Indians,Royal Challengers Bengaluru,Pinnacle,2.0,1.85,2022-04-09T13:30:00Z
+1304065,2022-04-10,Delhi Capitals,Kolkata Knight Riders,Pinnacle,2.15,1.71,2022-04-10T13:30:00Z
+1304066,2022-04-10,Rajasthan Royals,Lucknow Super Giants,Pinnacle,1.81,2.05,2022-04-10T13:30:00Z
+1304067,2022-04-11,Gujarat Titans,Sunrisers Hyderabad,Pinnacle,1.69,2.23,2022-04-11T13:30:00Z
+1304068,2022-04-12,Chennai Super Kings,Royal Challengers Bengaluru,Pinnacle,2.13,1.76,2022-04-12T13:30:00Z
+1304069,2022-04-13,Punjab Kings,Mumbai Indians,Pinnacle,2.01,1.85,2022-04-13T13:30:00Z
+1304070,2022-04-14,Gujarat Titans,Rajasthan Royals,Pinnacle,1.96,1.89,2022-04-14T13:30:00Z
+1304071,2022-04-15,Kolkata Knight Riders,Sunrisers Hyderabad,Pinnacle,1.68,2.26,2022-04-15T13:30:00Z
+1304073,2022-04-16,Royal Challengers Bengaluru,Delhi Capitals,Pinnacle,1.83,2.03,2022-04-16T13:30:00Z
+1304074,2022-04-17,Punjab Kings,Sunrisers Hyderabad,Pinnacle,2.06,1.78,2022-04-17T13:30:00Z
+1304075,2022-04-17,Chennai Super Kings,Gujarat Titans,Pinnacle,1.96,1.79,2022-04-17T13:30:00Z
+1304076,2022-04-18,Rajasthan Royals,Kolkata Knight Riders,Pinnacle,1.83,2.03,2022-04-18T13:30:00Z
+1304077,2022-04-19,Royal Challengers Bengaluru,Lucknow Super Giants,Pinnacle,1.78,2.07,2022-04-19T13:30:00Z
+1304078,2022-04-20,Punjab Kings,Delhi Capitals,Pinnacle,1.81,1.95,2022-04-20T13:30:00Z
+1304079,2022-04-21,Mumbai Indians,Chennai Super Kings,Pinnacle,1.82,1.94,2022-04-21T13:30:00Z
+1304080,2022-04-22,Rajasthan Royals,Delhi Capitals,Pinnacle,1.84,1.92,2022-04-22T13:30:00Z
+1304081,2022-04-23,Gujarat Titans,Kolkata Knight Riders,Pinnacle,1.97,1.73,2022-04-23T13:30:00Z
+1304082,2022-04-23,Royal Challengers Bengaluru,Sunrisers Hyderabad,Pinnacle,1.68,2.12,2022-04-23T13:30:00Z
+1304083,2022-04-24,Lucknow Super Giants,Mumbai Indians,Pinnacle,1.87,1.75,2022-04-24T13:30:00Z
+1304084,2022-04-25,Punjab Kings,Chennai Super Kings,Pinnacle,1.94,1.81,2022-04-25T13:30:00Z
+1304085,2022-04-26,Rajasthan Royals,Royal Challengers Bengaluru,Pinnacle,1.73,1.88,2022-04-26T13:30:00Z
+1304086,2022-04-27,Sunrisers Hyderabad,Gujarat Titans,Pinnacle,1.83,1.93,2022-04-27T13:30:00Z
+1304087,2022-04-28,Kolkata Knight Riders,Delhi Capitals,Pinnacle,1.84,1.91,2022-04-28T13:30:00Z
+1304088,2022-04-29,Lucknow Super Giants,Punjab Kings,Pinnacle,1.77,1.85,2022-04-29T13:30:00Z
+1304089,2022-04-30,Royal Challengers Bengaluru,Gujarat Titans,Pinnacle,1.79,1.9,2022-04-30T13:30:00Z
+1304090,2022-04-30,Rajasthan Royals,Mumbai Indians,Pinnacle,1.72,2.06,2022-04-30T13:30:00Z
+1304091,2022-05-01,Lucknow Super Giants,Delhi Capitals,Pinnacle,1.99,1.71,2022-05-01T13:30:00Z
+1304092,2022-05-01,Chennai Super Kings,Sunrisers Hyderabad,Pinnacle,1.92,1.84,2022-05-01T13:30:00Z
+1304093,2022-05-02,Rajasthan Royals,Kolkata Knight Riders,Pinnacle,1.77,2.0,2022-05-02T13:30:00Z
+1304094,2022-05-03,Gujarat Titans,Punjab Kings,Pinnacle,1.82,1.94,2022-05-03T13:30:00Z
+1304095,2022-05-04,Royal Challengers Bengaluru,Chennai Super Kings,Pinnacle,1.86,1.95,2022-05-04T13:30:00Z
+1304096,2022-05-05,Delhi Capitals,Sunrisers Hyderabad,Pinnacle,1.89,1.93,2022-05-05T13:30:00Z
+1304097,2022-05-06,Mumbai Indians,Gujarat Titans,Pinnacle,1.83,2.0,2022-05-06T13:30:00Z
+1304098,2022-05-07,Punjab Kings,Rajasthan Royals,Pinnacle,1.91,1.83,2022-05-07T13:30:00Z
+1304099,2022-05-07,Lucknow Super Giants,Kolkata Knight Riders,Pinnacle,1.8,2.04,2022-05-07T13:30:00Z
+1304100,2022-05-08,Royal Challengers Bengaluru,Sunrisers Hyderabad,Pinnacle,1.74,2.02,2022-05-08T13:30:00Z
+1304101,2022-05-08,Chennai Super Kings,Delhi Capitals,Pinnacle,2.07,1.78,2022-05-08T13:30:00Z
+1304102,2022-05-09,Kolkata Knight Riders,Mumbai Indians,Pinnacle,2.01,1.69,2022-05-09T13:30:00Z
+1304103,2022-05-10,Gujarat Titans,Lucknow Super Giants,Pinnacle,1.95,1.87,2022-05-10T13:30:00Z
+1304104,2022-05-11,Rajasthan Royals,Delhi Capitals,Pinnacle,1.79,2.04,2022-05-11T13:30:00Z
+1304105,2022-05-12,Chennai Super Kings,Mumbai Indians,Pinnacle,1.81,2.03,2022-05-12T13:30:00Z
+1304106,2022-05-13,Punjab Kings,Royal Challengers Bengaluru,Pinnacle,2.09,1.76,2022-05-13T13:30:00Z
+1304107,2022-05-14,Kolkata Knight Riders,Sunrisers Hyderabad,Pinnacle,1.84,1.98,2022-05-14T13:30:00Z
+1304108,2022-05-15,Chennai Super Kings,Gujarat Titans,Pinnacle,2.27,1.59,2022-05-15T13:30:00Z
+1304109,2022-05-15,Rajasthan Royals,Lucknow Super Giants,Pinnacle,2.0,1.83,2022-05-15T13:30:00Z
+1304110,2022-05-16,Delhi Capitals,Punjab Kings,Pinnacle,1.87,1.95,2022-05-16T13:30:00Z
+1304111,2022-05-17,Sunrisers Hyderabad,Mumbai Indians,Pinnacle,2.04,1.79,2022-05-17T13:30:00Z
+1304112,2022-05-18,Lucknow Super Giants,Kolkata Knight Riders,Pinnacle,1.74,2.12,2022-05-18T13:30:00Z
+1304113,2022-05-19,Gujarat Titans,Royal Challengers Bengaluru,Pinnacle,2.04,1.79,2022-05-19T13:30:00Z
+1304114,2022-05-20,Chennai Super Kings,Rajasthan Royals,Pinnacle,2.17,1.7,2022-05-20T13:30:00Z
+1304115,2022-05-21,Delhi Capitals,Mumbai Indians,Pinnacle,1.74,2.13,2022-05-21T13:30:00Z
+1304116,2022-05-22,Sunrisers Hyderabad,Punjab Kings,Pinnacle,2.01,1.81,2022-05-22T13:30:00Z
+1312197,2022-05-24,Rajasthan Royals,Gujarat Titans,Pinnacle,1.95,1.87,2022-05-24T13:30:00Z
+1312198,2022-05-25,Royal Challengers Bengaluru,Lucknow Super Giants,Pinnacle,1.83,1.99,2022-05-25T13:30:00Z
+1312199,2022-05-27,Royal Challengers Bengaluru,Rajasthan Royals,Pinnacle,1.81,1.93,2022-05-27T13:30:00Z
+1312200,2022-05-29,Rajasthan Royals,Gujarat Titans,Pinnacle,1.86,1.96,2022-05-29T13:30:00Z
+1359475,2023-03-31,Chennai Super Kings,Gujarat Titans,Pinnacle,2.2,1.74,2023-03-31T13:30:00Z
+1359477,2023-04-01,Lucknow Super Giants,Delhi Capitals,Pinnacle,1.92,1.97,2023-04-01T13:30:00Z
+1359479,2023-04-02,Mumbai Indians,Royal Challengers Bengaluru,Pinnacle,1.9,1.99,2023-04-02T13:30:00Z
+1359480,2023-04-03,Chennai Super Kings,Lucknow Super Giants,Pinnacle,2.05,1.85,2023-04-03T13:30:00Z
+1359481,2023-04-04,Delhi Capitals,Gujarat Titans,Pinnacle,2.04,1.85,2023-04-04T13:30:00Z
+1359482,2023-04-05,Punjab Kings,Rajasthan Royals,Pinnacle,2.26,1.7,2023-04-05T13:30:00Z
+1359483,2023-04-06,Kolkata Knight Riders,Royal Challengers Bengaluru,Pinnacle,2.2,1.74,2023-04-06T13:30:00Z
+1359484,2023-04-07,Sunrisers Hyderabad,Lucknow Super Giants,Pinnacle,2.27,1.69,2023-04-07T13:30:00Z
+1359485,2023-04-08,Rajasthan Royals,Delhi Capitals,Pinnacle,1.05,13.5,2023-04-08T13:30:00Z
+1359486,2023-04-08,Mumbai Indians,Chennai Super Kings,Pinnacle,1.85,2.05,2023-04-08T13:30:00Z
+1359487,2023-04-09,Gujarat Titans,Kolkata Knight Riders,Pinnacle,2.6,1.57,2023-04-09T13:30:00Z
+1359488,2023-04-09,Punjab Kings,Sunrisers Hyderabad,Pinnacle,1.78,2.15,2023-04-09T13:30:00Z
+1359489,2023-04-10,Royal Challengers Bengaluru,Lucknow Super Giants,Pinnacle,1.95,1.93,2023-04-10T13:30:00Z
+1359490,2023-04-11,Delhi Capitals,Mumbai Indians,Pinnacle,2.07,1.83,2023-04-11T13:30:00Z
+1359491,2023-04-12,Rajasthan Royals,Chennai Super Kings,Pinnacle,1.91,1.97,2023-04-12T13:30:00Z
+1359492,2023-04-13,Punjab Kings,Gujarat Titans,Pinnacle,2.08,1.82,2023-04-13T13:30:00Z
+1359493,2023-04-14,Sunrisers Hyderabad,Kolkata Knight Riders,Pinnacle,2.09,1.81,2023-04-14T13:30:00Z
+1359494,2023-04-15,Royal Challengers Bengaluru,Delhi Capitals,Pinnacle,1.04,18.0,2023-04-15T13:30:00Z
+1359495,2023-04-15,Lucknow Super Giants,Punjab Kings,Pinnacle,1.75,2.19,2023-04-15T13:30:00Z
+1359497,2023-04-16,Gujarat Titans,Rajasthan Royals,Pinnacle,1.86,2.03,2023-04-16T13:30:00Z
+1359498,2023-04-17,Chennai Super Kings,Royal Challengers Bengaluru,Pinnacle,2.13,1.79,2023-04-17T13:30:00Z
+1359499,2023-04-18,Mumbai Indians,Sunrisers Hyderabad,Pinnacle,1.83,2.07,2023-04-18T13:30:00Z
+1359500,2023-04-19,Lucknow Super Giants,Rajasthan Royals,Pinnacle,2.09,1.82,2023-04-19T13:30:00Z
+1359502,2023-04-20,Kolkata Knight Riders,Delhi Capitals,Pinnacle,1.7,2.26,2023-04-20T13:30:00Z
+1359503,2023-04-21,Sunrisers Hyderabad,Chennai Super Kings,Pinnacle,2.16,1.76,2023-04-21T13:30:00Z
+1359504,2023-04-22,Gujarat Titans,Lucknow Super Giants,Pinnacle,12.0,1.06,2023-04-22T13:30:00Z
+1359505,2023-04-22,Punjab Kings,Mumbai Indians,Pinnacle,2.18,1.75,2023-04-22T13:30:00Z
+1359507,2023-04-23,Chennai Super Kings,Kolkata Knight Riders,Pinnacle,1.75,2.18,2023-04-23T13:30:00Z
+1359508,2023-04-24,Delhi Capitals,Sunrisers Hyderabad,Pinnacle,2.06,1.83,2023-04-24T13:30:00Z
+1359509,2023-04-25,Gujarat Titans,Mumbai Indians,Pinnacle,1.85,2.04,2023-04-25T13:30:00Z
+1359510,2023-04-26,Kolkata Knight Riders,Royal Challengers Bengaluru,Pinnacle,2.17,1.76,2023-04-26T13:30:00Z
+1359511,2023-04-27,Rajasthan Royals,Chennai Super Kings,Pinnacle,1.87,2.02,2023-04-27T13:30:00Z
+1359512,2023-04-28,Lucknow Super Giants,Punjab Kings,Pinnacle,1.83,2.07,2023-04-28T13:30:00Z
+1359513,2023-04-29,Kolkata Knight Riders,Gujarat Titans,Pinnacle,4.2,1.27,2023-04-29T13:30:00Z
+1359514,2023-04-29,Sunrisers Hyderabad,Delhi Capitals,Pinnacle,2.02,1.87,2023-04-29T13:30:00Z
+1359515,2023-04-30,Chennai Super Kings,Punjab Kings,Pinnacle,1.27,4.4,2023-04-30T13:30:00Z
+1359516,2023-04-30,Rajasthan Royals,Mumbai Indians,Pinnacle,1.86,2.03,2023-04-30T13:30:00Z
+1359517,2023-05-01,Royal Challengers Bengaluru,Lucknow Super Giants,Pinnacle,1.94,1.94,2023-05-01T13:30:00Z
+1359518,2023-05-02,Delhi Capitals,Gujarat Titans,Pinnacle,2.31,1.68,2023-05-02T13:30:00Z
+1359520,2023-05-03,Punjab Kings,Mumbai Indians,Pinnacle,2.03,1.87,2023-05-03T13:30:00Z
+1359521,2023-05-04,Kolkata Knight Riders,Sunrisers Hyderabad,Pinnacle,2.04,1.86,2023-05-04T13:30:00Z
+1359522,2023-05-05,Rajasthan Royals,Gujarat Titans,Pinnacle,2.0,1.88,2023-05-05T13:30:00Z
+1359524,2023-05-06,Royal Challengers Bengaluru,Delhi Capitals,Pinnacle,1.74,2.21,2023-05-06T13:30:00Z
+1359525,2023-05-07,Gujarat Titans,Lucknow Super Giants,Pinnacle,1.05,13.5,2023-05-07T13:30:00Z
+1359526,2023-05-07,Rajasthan Royals,Sunrisers Hyderabad,Pinnacle,1.71,2.25,2023-05-07T13:30:00Z
+1359527,2023-05-08,Punjab Kings,Kolkata Knight Riders,Pinnacle,2.08,1.82,2023-05-08T13:30:00Z
+1359528,2023-05-09,Royal Challengers Bengaluru,Mumbai Indians,Pinnacle,2.04,1.85,2023-05-09T13:30:00Z
+1359529,2023-05-10,Chennai Super Kings,Delhi Capitals,Pinnacle,1.72,2.23,2023-05-10T13:30:00Z
+1359530,2023-05-11,Kolkata Knight Riders,Rajasthan Royals,Pinnacle,2.13,1.79,2023-05-11T13:30:00Z
+1359531,2023-05-12,Mumbai Indians,Gujarat Titans,Pinnacle,2.01,1.88,2023-05-12T13:30:00Z
+1359532,2023-05-13,Sunrisers Hyderabad,Lucknow Super Giants,Pinnacle,1.31,3.8,2023-05-13T13:30:00Z
+1359533,2023-05-13,Punjab Kings,Delhi Capitals,Pinnacle,1.89,2.0,2023-05-13T13:30:00Z
+1359535,2023-05-14,Chennai Super Kings,Kolkata Knight Riders,Pinnacle,1.66,2.35,2023-05-14T13:30:00Z
+1359536,2023-05-15,Gujarat Titans,Sunrisers Hyderabad,Pinnacle,1.63,2.4,2023-05-15T13:30:00Z
+1359537,2023-05-16,Lucknow Super Giants,Mumbai Indians,Pinnacle,2.07,1.83,2023-05-16T13:30:00Z
+1359538,2023-05-17,Delhi Capitals,Punjab Kings,Pinnacle,2.12,1.79,2023-05-17T13:30:00Z
+1359539,2023-05-18,Sunrisers Hyderabad,Royal Challengers Bengaluru,Pinnacle,2.3,1.57,2023-05-18T13:30:00Z
+1359540,2023-05-19,Punjab Kings,Rajasthan Royals,Pinnacle,2.14,1.78,2023-05-19T13:30:00Z
+1359542,2023-05-20,Lucknow Super Giants,Kolkata Knight Riders,Pinnacle,1.83,2.07,2023-05-20T13:30:00Z
+1359543,2023-05-21,Sunrisers Hyderabad,Mumbai Indians,Pinnacle,18.0,1.03,2023-05-21T13:30:00Z
+1359544,2023-05-21,Royal Challengers Bengaluru,Gujarat Titans,Pinnacle,1.77,1.98,2023-05-21T13:30:00Z
+1370350,2023-05-23,Chennai Super Kings,Gujarat Titans,Pinnacle,1.87,1.87,2023-05-23T13:30:00Z
+1370351,2023-05-24,Mumbai Indians,Lucknow Super Giants,Pinnacle,1.74,2.2,2023-05-24T13:30:00Z
+1370352,2023-05-26,Gujarat Titans,Mumbai Indians,Pinnacle,1.85,2.04,2023-05-26T13:30:00Z
+1422119,2024-03-22,Royal Challengers Bengaluru,Chennai Super Kings,Pinnacle,2.11,1.8,2024-03-22T13:30:00Z
+1422120,2024-03-23,Delhi Capitals,Punjab Kings,Pinnacle,1.87,2.03,2024-03-23T13:30:00Z
+1422121,2024-03-23,Kolkata Knight Riders,Sunrisers Hyderabad,Pinnacle,1.88,2.01,2024-03-23T13:30:00Z
+1422122,2024-03-24,Rajasthan Royals,Lucknow Super Giants,Pinnacle,1.81,2.1,2024-03-24T13:30:00Z
+1422123,2024-03-24,Gujarat Titans,Mumbai Indians,Pinnacle,2.16,1.76,2024-03-24T13:30:00Z
+1422124,2024-03-25,Punjab Kings,Royal Challengers Bengaluru,Pinnacle,2.21,1.73,2024-03-25T13:30:00Z
+1422125,2024-03-26,Chennai Super Kings,Gujarat Titans,Pinnacle,1.78,2.15,2024-03-26T13:30:00Z
+1422126,2024-03-27,Sunrisers Hyderabad,Mumbai Indians,Pinnacle,2.18,1.75,2024-03-27T13:30:00Z
+1422127,2024-03-28,Rajasthan Royals,Delhi Capitals,Pinnacle,1.72,2.23,2024-03-28T13:30:00Z
+1422128,2024-03-29,Royal Challengers Bengaluru,Kolkata Knight Riders,Pinnacle,1.83,2.07,2024-03-29T13:30:00Z
+1422129,2024-03-30,Lucknow Super Giants,Punjab Kings,Pinnacle,1.81,2.1,2024-03-30T13:30:00Z
+1422130,2024-03-31,Sunrisers Hyderabad,Gujarat Titans,Pinnacle,1.84,2.06,2024-03-31T13:30:00Z
+1422131,2024-03-31,Delhi Capitals,Chennai Super Kings,Pinnacle,2.3,1.68,2024-03-31T13:30:00Z
+1422132,2024-04-01,Mumbai Indians,Rajasthan Royals,Pinnacle,1.79,2.12,2024-04-01T13:30:00Z
+1422133,2024-04-02,Lucknow Super Giants,Royal Challengers Bengaluru,Pinnacle,2.13,1.79,2024-04-02T13:30:00Z
+1422134,2024-04-03,Kolkata Knight Riders,Delhi Capitals,Pinnacle,1.8,2.11,2024-04-03T13:30:00Z
+1422135,2024-04-04,Gujarat Titans,Punjab Kings,Pinnacle,1.73,2.22,2024-04-04T13:30:00Z
+1422136,2024-04-05,Chennai Super Kings,Sunrisers Hyderabad,Pinnacle,1.81,2.1,2024-04-05T13:30:00Z
+1422137,2024-04-06,Royal Challengers Bengaluru,Rajasthan Royals,Pinnacle,2.13,1.79,2024-04-06T13:30:00Z
+1422138,2024-04-07,Mumbai Indians,Delhi Capitals,Pinnacle,1.58,2.52,2024-04-07T13:30:00Z
+1422139,2024-04-07,Lucknow Super Giants,Gujarat Titans,Pinnacle,1.81,2.09,2024-04-07T13:30:00Z
+1426260,2024-04-08,Kolkata Knight Riders,Chennai Super Kings,Pinnacle,1.89,1.99,2024-04-08T13:30:00Z
+1426261,2024-04-09,Sunrisers Hyderabad,Punjab Kings,Pinnacle,1.81,2.1,2024-04-09T13:30:00Z
+1426262,2024-04-10,Rajasthan Royals,Gujarat Titans,Pinnacle,1.7,2.26,2024-04-10T13:30:00Z
+1426263,2024-04-11,Royal Challengers Bengaluru,Mumbai Indians,Pinnacle,2.37,1.65,2024-04-11T13:30:00Z
+1426264,2024-04-12,Lucknow Super Giants,Delhi Capitals,Pinnacle,1.74,2.2,2024-04-12T13:30:00Z
+1426265,2024-04-13,Punjab Kings,Rajasthan Royals,Pinnacle,2.17,1.76,2024-04-13T13:30:00Z
+1426266,2024-04-14,Lucknow Super Giants,Kolkata Knight Riders,Pinnacle,2.2,1.74,2024-04-14T13:30:00Z
+1426267,2024-04-14,Chennai Super Kings,Mumbai Indians,Pinnacle,2.38,1.64,2024-04-14T13:30:00Z
+1426268,2024-04-15,Sunrisers Hyderabad,Royal Challengers Bengaluru,Pinnacle,1.8,2.11,2024-04-15T13:30:00Z
+1426269,2024-04-16,Kolkata Knight Riders,Rajasthan Royals,Pinnacle,1.76,2.17,2024-04-16T13:30:00Z
+1426270,2024-04-17,Gujarat Titans,Delhi Capitals,Pinnacle,1.75,2.18,2024-04-17T13:30:00Z
+1426271,2024-04-18,Mumbai Indians,Punjab Kings,Pinnacle,1.52,2.69,2024-04-18T13:30:00Z
+1426272,2024-04-19,Chennai Super Kings,Lucknow Super Giants,Pinnacle,1.75,2.19,2024-04-19T13:30:00Z
+1426273,2024-04-20,Sunrisers Hyderabad,Delhi Capitals,Pinnacle,1.73,2.21,2024-04-20T13:30:00Z
+1426274,2024-04-21,Kolkata Knight Riders,Royal Challengers Bengaluru,Pinnacle,1.7,2.27,2024-04-21T13:30:00Z
+1426275,2024-04-21,Punjab Kings,Gujarat Titans,Pinnacle,2.11,1.81,2024-04-21T13:30:00Z
+1426276,2024-04-22,Mumbai Indians,Rajasthan Royals,Pinnacle,1.78,2.14,2024-04-22T13:30:00Z
+1426277,2024-04-23,Chennai Super Kings,Lucknow Super Giants,Pinnacle,1.78,2.14,2024-04-23T13:30:00Z
+1426278,2024-04-24,Delhi Capitals,Gujarat Titans,Pinnacle,2.04,1.85,2024-04-24T13:30:00Z
+1426279,2024-04-25,Royal Challengers Bengaluru,Sunrisers Hyderabad,Pinnacle,2.31,1.67,2024-04-25T13:30:00Z
+1426280,2024-04-26,Kolkata Knight Riders,Punjab Kings,Pinnacle,1.67,2.31,2024-04-26T13:30:00Z
+1426281,2024-04-27,Delhi Capitals,Mumbai Indians,Pinnacle,2.65,1.53,2024-04-27T13:30:00Z
+1426282,2024-04-27,Lucknow Super Giants,Rajasthan Royals,Pinnacle,2.1,1.81,2024-04-27T13:30:00Z
+1426284,2024-04-28,Chennai Super Kings,Sunrisers Hyderabad,Pinnacle,1.89,2.0,2024-04-28T13:30:00Z
+1426285,2024-04-29,Delhi Capitals,Kolkata Knight Riders,Pinnacle,2.23,1.72,2024-04-29T13:30:00Z
+1426286,2024-04-30,Mumbai Indians,Lucknow Super Giants,Pinnacle,1.78,2.15,2024-04-30T13:30:00Z
+1426287,2024-05-01,Chennai Super Kings,Punjab Kings,Pinnacle,1.66,2.33,2024-05-01T13:30:00Z
+1426288,2024-05-02,Sunrisers Hyderabad,Rajasthan Royals,Pinnacle,1.93,1.96,2024-05-02T13:30:00Z
+1426289,2024-05-03,Kolkata Knight Riders,Mumbai Indians,Pinnacle,2.23,1.72,2024-05-03T13:30:00Z
+1426290,2024-05-04,Gujarat Titans,Royal Challengers Bengaluru,Pinnacle,2.21,1.74,2024-05-04T13:30:00Z
+1426292,2024-05-05,Kolkata Knight Riders,Lucknow Super Giants,Pinnacle,1.79,2.13,2024-05-05T13:30:00Z
+1426293,2024-05-06,Sunrisers Hyderabad,Mumbai Indians,Pinnacle,2.05,1.85,2024-05-06T13:30:00Z
+1426294,2024-05-07,Delhi Capitals,Rajasthan Royals,Pinnacle,2.18,1.75,2024-05-07T13:30:00Z
+1426295,2024-05-08,Lucknow Super Giants,Sunrisers Hyderabad,Pinnacle,2.25,1.7,2024-05-08T13:30:00Z
+1426296,2024-05-09,Royal Challengers Bengaluru,Punjab Kings,Pinnacle,1.76,2.16,2024-05-09T13:30:00Z
+1426297,2024-05-10,Gujarat Titans,Chennai Super Kings,Pinnacle,2.28,1.69,2024-05-10T13:30:00Z
+1426298,2024-05-11,Kolkata Knight Riders,Mumbai Indians,Pinnacle,1.88,2.02,2024-05-11T13:30:00Z
+1426299,2024-05-12,Rajasthan Royals,Chennai Super Kings,Pinnacle,1.84,2.06,2024-05-12T13:30:00Z
+1426300,2024-05-12,Royal Challengers Bengaluru,Delhi Capitals,Pinnacle,1.7,2.26,2024-05-12T13:30:00Z
+1426302,2024-05-14,Delhi Capitals,Lucknow Super Giants,Pinnacle,1.76,2.17,2024-05-14T13:30:00Z
+1426303,2024-05-15,Rajasthan Royals,Punjab Kings,Pinnacle,1.66,2.33,2024-05-15T13:30:00Z
+1426305,2024-05-17,Lucknow Super Giants,Mumbai Indians,Pinnacle,2.23,1.72,2024-05-17T13:30:00Z
+1426306,2024-05-18,Royal Challengers Bengaluru,Chennai Super Kings,Pinnacle,1.86,2.03,2024-05-18T13:30:00Z
+1426309,2024-05-21,Sunrisers Hyderabad,Kolkata Knight Riders,Pinnacle,1.96,1.93,2024-05-21T13:30:00Z
+1426310,2024-05-22,Royal Challengers Bengaluru,Rajasthan Royals,Pinnacle,1.82,2.12,2024-05-22T13:30:00Z
+1426311,2024-05-24,Sunrisers Hyderabad,Rajasthan Royals,Pinnacle,1.81,2.1,2024-05-24T13:30:00Z
+1426312,2024-05-26,Sunrisers Hyderabad,Kolkata Knight Riders,Pinnacle,1.97,1.92,2024-05-26T13:30:00Z
+1473438,2025-03-22,Kolkata Knight Riders,Royal Challengers Bengaluru,Pinnacle,1.83,2.03,2025-03-22T13:30:00Z
+1473440,2025-03-23,Mumbai Indians,Chennai Super Kings,Pinnacle,2.06,1.81,2025-03-23T13:30:00Z
+1473442,2025-03-25,Punjab Kings,Gujarat Titans,Pinnacle,2.13,1.76,2025-03-25T13:30:00Z
+1473443,2025-03-26,Rajasthan Royals,Kolkata Knight Riders,Pinnacle,2.17,1.73,2025-03-26T13:30:00Z
+1473444,2025-03-27,Sunrisers Hyderabad,Lucknow Super Giants,Pinnacle,1.53,2.58,2025-03-27T13:30:00Z
+1473445,2025-03-28,Royal Challengers Bengaluru,Chennai Super Kings,Pinnacle,2.18,1.72,2025-03-28T13:30:00Z
+1473446,2025-03-29,Gujarat Titans,Mumbai Indians,Pinnacle,1.93,1.92,2025-03-29T13:30:00Z
+1473448,2025-03-30,Rajasthan Royals,Chennai Super Kings,Pinnacle,2.03,1.83,2025-03-30T13:30:00Z
+1473449,2025-03-31,Kolkata Knight Riders,Mumbai Indians,Pinnacle,2.14,1.75,2025-03-31T13:30:00Z
+1473450,2025-04-01,Lucknow Super Giants,Punjab Kings,Pinnacle,1.88,1.98,2025-04-01T13:30:00Z
+1473451,2025-04-02,Royal Challengers Bengaluru,Gujarat Titans,Pinnacle,1.8,2.07,2025-04-02T13:30:00Z
+1473452,2025-04-03,Kolkata Knight Riders,Sunrisers Hyderabad,Pinnacle,2.18,1.72,2025-04-03T13:30:00Z
+1473453,2025-04-04,Lucknow Super Giants,Mumbai Indians,Pinnacle,2.22,1.69,2025-04-04T13:30:00Z
+1473455,2025-04-05,Rajasthan Royals,Punjab Kings,Pinnacle,2.24,1.68,2025-04-05T13:30:00Z
+1473457,2025-04-06,Sunrisers Hyderabad,Gujarat Titans,Pinnacle,1.78,2.1,2025-04-06T13:30:00Z
+1473458,2025-04-07,Royal Challengers Bengaluru,Mumbai Indians,Pinnacle,2.22,1.69,2025-04-07T13:30:00Z
+1473459,2025-04-08,Punjab Kings,Chennai Super Kings,Pinnacle,1.75,2.15,2025-04-08T13:30:00Z
+1473460,2025-04-09,Gujarat Titans,Rajasthan Royals,Pinnacle,1.78,2.1,2025-04-09T13:30:00Z
+1473461,2025-04-10,Royal Challengers Bengaluru,Delhi Capitals,Pinnacle,1.76,2.13,2025-04-10T13:30:00Z
+1473462,2025-04-11,Chennai Super Kings,Kolkata Knight Riders,Pinnacle,2.15,1.74,2025-04-11T13:30:00Z
+1473464,2025-04-12,Punjab Kings,Sunrisers Hyderabad,Pinnacle,1.97,1.88,2025-04-12T13:30:00Z
+1473466,2025-04-13,Mumbai Indians,Delhi Capitals,Pinnacle,1.71,2.19,2025-04-13T13:30:00Z
+1473467,2025-04-14,Lucknow Super Giants,Chennai Super Kings,Pinnacle,1.63,2.34,2025-04-14T13:30:00Z
+1473468,2025-04-15,Punjab Kings,Kolkata Knight Riders,Pinnacle,1.92,1.93,2025-04-15T13:30:00Z
+1473470,2025-04-17,Sunrisers Hyderabad,Mumbai Indians,Pinnacle,2.18,1.72,2025-04-17T13:30:00Z
+1473471,2025-04-18,Royal Challengers Bengaluru,Punjab Kings,Pinnacle,1.78,2.1,2025-04-18T13:30:00Z
+1473473,2025-04-19,Lucknow Super Giants,Rajasthan Royals,Pinnacle,1.81,2.06,2025-04-19T13:30:00Z
+1473475,2025-04-20,Chennai Super Kings,Mumbai Indians,Pinnacle,2.8,1.46,2025-04-20T13:30:00Z
+1473476,2025-04-21,Gujarat Titans,Kolkata Knight Riders,Pinnacle,1.99,1.86,2025-04-21T13:30:00Z
+1473477,2025-04-22,Lucknow Super Giants,Delhi Capitals,Pinnacle,1.87,1.98,2025-04-22T13:30:00Z
+1473478,2025-04-23,Sunrisers Hyderabad,Mumbai Indians,Pinnacle,2.29,1.66,2025-04-23T13:30:00Z
+1473479,2025-04-24,Royal Challengers Bengaluru,Rajasthan Royals,Pinnacle,1.6,2.41,2025-04-24T13:30:00Z
+1473480,2025-04-25,Chennai Super Kings,Sunrisers Hyderabad,Pinnacle,2.1,1.78,2025-04-25T13:30:00Z
+1473483,2025-04-27,Delhi Capitals,Royal Challengers Bengaluru,Pinnacle,1.96,1.89,2025-04-27T13:30:00Z
+1473484,2025-04-28,Gujarat Titans,Rajasthan Royals,Pinnacle,1.62,2.37,2025-04-28T13:30:00Z
+1473485,2025-04-29,Kolkata Knight Riders,Delhi Capitals,Pinnacle,2.02,1.84,2025-04-29T13:30:00Z
+1473486,2025-04-30,Chennai Super Kings,Punjab Kings,Pinnacle,2.27,1.67,2025-04-30T13:30:00Z
+1473487,2025-05-01,Mumbai Indians,Rajasthan Royals,Pinnacle,1.51,2.64,2025-05-01T13:30:00Z
+1473488,2025-05-02,Gujarat Titans,Sunrisers Hyderabad,Pinnacle,1.74,2.15,2025-05-02T13:30:00Z
+1473489,2025-05-03,Royal Challengers Bengaluru,Chennai Super Kings,Pinnacle,1.53,2.59,2025-05-03T13:30:00Z
+1473491,2025-05-04,Punjab Kings,Lucknow Super Giants,Pinnacle,1.84,2.02,2025-05-04T13:30:00Z
+1473494,2025-05-07,Kolkata Knight Riders,Chennai Super Kings,Pinnacle,1.59,2.43,2025-05-07T13:30:00Z
+1473498,2025-05-18,Delhi Capitals,Gujarat Titans,Pinnacle,2.15,1.75,2025-05-18T13:30:00Z
+1473499,2025-05-19,Lucknow Super Giants,Sunrisers Hyderabad,Pinnacle,1.71,2.19,2025-05-19T13:30:00Z
+1473500,2025-05-20,Chennai Super Kings,Rajasthan Royals,Pinnacle,1.88,1.97,2025-05-20T13:30:00Z
+1473502,2025-05-22,Lucknow Super Giants,Gujarat Titans,Pinnacle,2.41,1.6,2025-05-22T13:30:00Z
+1473503,2025-05-23,Sunrisers Hyderabad,Royal Challengers Bengaluru,Pinnacle,2.18,1.72,2025-05-23T13:30:00Z
+1485779,2025-05-24,Punjab Kings,Delhi Capitals,Pinnacle,1.65,2.32,2025-05-24T13:30:00Z
+1473505,2025-05-25,Sunrisers Hyderabad,Kolkata Knight Riders,Pinnacle,1.92,1.93,2025-05-25T13:30:00Z
+1473506,2025-05-26,Mumbai Indians,Punjab Kings,Pinnacle,1.6,2.42,2025-05-26T13:30:00Z
+1473507,2025-05-27,Lucknow Super Giants,Royal Challengers Bengaluru,Pinnacle,2.27,1.67,2025-05-27T13:30:00Z
+1473508,2025-05-29,Punjab Kings,Royal Challengers Bengaluru,Pinnacle,1.93,1.93,2025-05-29T13:30:00Z
+1473509,2025-05-30,Mumbai Indians,Gujarat Titans,Pinnacle,1.58,2.45,2025-05-30T13:30:00Z
+1473510,2025-06-01,Mumbai Indians,Punjab Kings,Pinnacle,1.65,2.3,2025-06-01T13:30:00Z
+1473511,2025-06-03,Royal Challengers Bengaluru,Punjab Kings,Pinnacle,1.85,2.0,2025-06-03T13:30:00Z

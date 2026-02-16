@@ -1,0 +1,197 @@
+What Your UI Is Showing
+
+From the screenshots:
+
+✅ Pre-Match Edge
+
+Only profitable at 10% threshold
+
+Small sample (62 bets)
+
++5.27% ROI
+
+That is believable
+
+Good.
+
+⚠️ In-Play Edge (≥85% states)
+
+31 trades
+
+26 wins
+
+83.9% win rate
+
++67% ROI
+
+Max DD 3.23%
+
+That is extremely high.
+
+Too high to assume real without stress testing.
+
+🧠 Immediate Questions We Must Answer
+
+Before believing 67% ROI:
+
+Are we using only ONE trade per match?
+(You say yes — good.)
+
+Are we using actual Pinnacle odds at the in-play timestamp?
+Or are we accidentally still using pre-match odds?
+
+Are timestamps aligned correctly with over states?
+(Very important.)
+
+Are we accidentally selecting hindsight states?
+(Example: choosing the highest probability state per match.)
+
+Are we allowing multiple high-confidence snapshots per match but only simulating best one?
+
+This is where bias sneaks in.
+
+🚨 The Biggest Risk Here
+
+You filtered:
+
+Model probability ≥ 85%
+
+But here’s the danger:
+
+If those states mostly occur in:
+
+Over 16–20
+When outcome is almost decided
+
+Then market odds will also be very short.
+
+If timestamp mapping is off by even 5–10 minutes,
+you may be fetching pre-collapse odds.
+
+That creates artificial edge.
+
+📊 Your Stats Show:
+
+200 high-confidence snapshots
+
+31 unique matches
+
+Avg edge: 45%
+
+Win rate: 93%
+
+93% win rate is extremely high.
+
+Even strong in-play edges rarely exceed:
+
+60–65% sustainable.
+
+So we verify.
+
+🧪 What We Must Audit Next (Non-Negotiable)
+
+I want you to check:
+
+1️⃣ Distribution of Over Numbers
+
+For those 31 trades:
+
+What is average over?
+
+How many occur in overs 17–20?
+
+How many occur in overs 1–6?
+
+If 80% are death overs,
+this may simply be “model recognizes near certainty.”
+
+2️⃣ Compare Market Probability
+
+For each trade:
+
+Print:
+
+Model probability
+Market implied probability
+Over number
+
+If market implied probability is:
+
+0.75
+Model is 0.90
+
+Edge = 15%
+
+That’s believable.
+
+If market is 0.55
+Model is 0.90
+
+Something is wrong.
+
+3️⃣ Check Timestamp Alignment
+
+Confirm:
+
+timestamp = match_start + (over_number × 4 minutes)
+
+But what is match_start?
+
+Hardcoded?
+Estimated?
+Or actual from API?
+
+If match_start assumption is wrong by 30 minutes,
+you may be pulling wrong snapshot.
+
+🔥 I Need This From You
+
+Run this diagnostic:
+
+For the 31 trades:
+
+Print a table with:
+
+match_id
+over_number
+innings_number
+model_probability
+market_probability
+edge
+actual_result
+
+Paste 10 random rows.
+
+No summaries.
+Raw rows.
+
+Let’s inspect like adults.
+
+🧠 One More Observation
+
+Your calibration graph is excellent.
+
+Mean calibration error: 0.0169
+
+That’s very strong.
+
+So model quality is real.
+
+But edge magnitude must survive audit.
+
+🎯 Important
+
+If the edge survives audit:
+
+You have something rare.
+
+If it doesn’t:
+
+We refine and move forward.
+
+Either way,
+this is real progress.
+
+Now show me:
+
+10 random in-play trades with full details.

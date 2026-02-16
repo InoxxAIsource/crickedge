@@ -1,0 +1,94 @@
+I am building a cricket analytics SaaS called Crickedge.
+
+Phase 1: IPL Historical Data Engineering Foundation.
+
+Project Requirements:
+
+1. My IPL JSON files (Cricsheet format) are inside:
+   data/raw_json/
+
+2. Create a clean project structure:
+
+   data/
+     raw_json/
+     processed/
+
+   scripts/
+
+3. Build three Python scripts:
+
+   A) build_metadata.py
+      - Loop through all JSON files
+      - Extract:
+          match_id
+          season
+          date
+          venue
+          team_1
+          team_2
+          toss_winner
+          toss_decision
+          winner
+      - Skip matches with:
+          no winner
+          DLS method
+      - Save as:
+          data/processed/match_metadata.csv
+
+   B) build_powerplay_summary.py
+      - For each valid match:
+          extract first innings overs 1–6
+          calculate:
+              powerplay_runs
+              powerplay_wickets
+      - Include:
+          match_id
+          season
+          venue
+          batting_team
+          bowling_team
+          toss_winner
+          toss_decision
+          final_winner
+      - Save as:
+          data/processed/powerplay_summary.csv
+
+   C) build_over_state_snapshots.py
+      - For each valid match:
+          For each innings:
+              At end of every over:
+                  calculate cumulative:
+                      runs_so_far
+                      wickets_so_far
+              If second innings:
+                  compute:
+                      target
+                      balls_remaining
+                      required_run_rate
+          Include:
+              match_id
+              season
+              venue
+              innings_number
+              over_number
+              batting_team
+              bowling_team
+              runs_so_far
+              wickets_so_far
+              balls_remaining
+              target
+              required_run_rate
+              eventual_winner
+      - Save as:
+          data/processed/over_state_snapshots.csv
+
+4. Ensure:
+   - Code is modular
+   - Functions are reusable
+   - No data leakage
+   - Proper error handling
+   - Print summary stats after execution
+
+Do not build ML models.
+Do not build UI.
+Only build clean data engineering foundation.

@@ -14,6 +14,18 @@ FIELDNAMES = [
 ]
 
 
+TEAM_NAME_MAP = {
+    "Royal Challengers Bangalore": "Royal Challengers Bengaluru",
+    "Delhi Daredevils": "Delhi Capitals",
+    "Kings XI Punjab": "Punjab Kings",
+    "Rising Pune Supergiants": "Rising Pune Supergiant",
+}
+
+
+def normalize_team(name):
+    return TEAM_NAME_MAP.get(name, name)
+
+
 def load_json(filepath):
     with open(filepath, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -60,13 +72,13 @@ def extract_powerplay(match_id, data):
         "match_id": match_id,
         "season": str(info.get("season", "")),
         "venue": info.get("venue", ""),
-        "batting_team": batting_team,
-        "bowling_team": bowling_team,
-        "toss_winner": info.get("toss", {}).get("winner", ""),
+        "batting_team": normalize_team(batting_team),
+        "bowling_team": normalize_team(bowling_team),
+        "toss_winner": normalize_team(info.get("toss", {}).get("winner", "")),
         "toss_decision": info.get("toss", {}).get("decision", ""),
         "powerplay_runs": pp_runs,
         "powerplay_wickets": pp_wickets,
-        "final_winner": info["outcome"]["winner"],
+        "final_winner": normalize_team(info["outcome"]["winner"]),
     }
 
 

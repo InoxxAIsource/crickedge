@@ -14,6 +14,18 @@ FIELDNAMES = [
 ]
 
 
+TEAM_NAME_MAP = {
+    "Royal Challengers Bangalore": "Royal Challengers Bengaluru",
+    "Delhi Daredevils": "Delhi Capitals",
+    "Kings XI Punjab": "Punjab Kings",
+    "Rising Pune Supergiants": "Rising Pune Supergiant",
+}
+
+
+def normalize_team(name):
+    return TEAM_NAME_MAP.get(name, name)
+
+
 def load_json(filepath):
     with open(filepath, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -48,7 +60,7 @@ def compute_over_snapshots(match_id, data):
     info = data["info"]
     innings_list = data.get("innings", [])
     teams = info.get("teams", [])
-    winner = info["outcome"]["winner"]
+    winner = normalize_team(info["outcome"]["winner"])
     season = str(info.get("season", ""))
     venue = info.get("venue", "")
     max_overs = info.get("overs", 20)
@@ -62,8 +74,8 @@ def compute_over_snapshots(match_id, data):
 
     for innings_idx, innings_obj in enumerate(innings_list):
         innings_number = innings_idx + 1
-        batting_team = innings_obj["team"]
-        bowling_team = [t for t in teams if t != batting_team]
+        batting_team = normalize_team(innings_obj["team"])
+        bowling_team = [normalize_team(t) for t in teams if normalize_team(t) != batting_team]
         bowling_team = bowling_team[0] if bowling_team else ""
 
         cumulative_runs = 0

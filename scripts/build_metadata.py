@@ -12,6 +12,17 @@ FIELDNAMES = [
     "team_1", "team_2", "toss_winner", "toss_decision", "winner"
 ]
 
+TEAM_NAME_MAP = {
+    "Royal Challengers Bangalore": "Royal Challengers Bengaluru",
+    "Delhi Daredevils": "Delhi Capitals",
+    "Kings XI Punjab": "Punjab Kings",
+    "Rising Pune Supergiants": "Rising Pune Supergiant",
+}
+
+
+def normalize_team(name):
+    return TEAM_NAME_MAP.get(name, name)
+
 
 def load_json(filepath):
     with open(filepath, "r", encoding="utf-8") as f:
@@ -35,11 +46,11 @@ def extract_metadata(match_id, data):
         "season": str(info.get("season", "")),
         "date": info.get("dates", [""])[0],
         "venue": info.get("venue", ""),
-        "team_1": teams[0] if len(teams) > 0 else "",
-        "team_2": teams[1] if len(teams) > 1 else "",
-        "toss_winner": info.get("toss", {}).get("winner", ""),
+        "team_1": normalize_team(teams[0]) if len(teams) > 0 else "",
+        "team_2": normalize_team(teams[1]) if len(teams) > 1 else "",
+        "toss_winner": normalize_team(info.get("toss", {}).get("winner", "")),
         "toss_decision": info.get("toss", {}).get("decision", ""),
-        "winner": info["outcome"]["winner"],
+        "winner": normalize_team(info["outcome"]["winner"]),
     }
 
 
@@ -78,13 +89,21 @@ def build_metadata():
         writer.writeheader()
         writer.writerows(rows)
 
+    unique_teams = sorted(set(
+        [r["team_1"] for r in rows] + [r["team_2"] for r in rows]
+    ))
+
     print("\n=== build_metadata.py Summary ===")
     print(f"  Total JSON files scanned : {len(json_files)}")
     print(f"  Valid matches saved      : {len(rows)}")
     print(f"  Skipped (no winner)      : {skipped_no_winner}")
     print(f"  Skipped (DLS method)     : {skipped_dls}")
     print(f"  Errors                   : {errors}")
+    print(f"  Unique teams             : {len(unique_teams)}")
     print(f"  Output                   : {OUTPUT_PATH}")
+    print(f"\n  Team list after normalization:")
+    for t in unique_teams:
+        print(f"    - {t}")
 
     return rows
 

@@ -100,6 +100,7 @@ Streamlit app with 6 pages navigated via sidebar radio buttons:
 - SESSION_SECRET: App session secret
 
 ## Recent Changes
+- 2026-02-16: Phase 9 fix — Re-fetched in-play odds with corrected timestamps and multi-bookmaker support (pinnacle, betfair_ex_eu, sport888, etc). 1348 snapshots from 217 matches. Real in-play edge: 50-61% ROI, 80% win rate across thresholds. Optimized fetch to 1 API call per match-innings group.
 - 2026-02-16: Phase 9 — In-play Pinnacle odds fetching (dual slot detection), live edge simulation (67% ROI), Streamlit dashboard built with 6 pages
 - 2026-02-16: Phase 8 — Live model calibration (Brier 0.2012, excellent calibration)
 - 2026-02-16: Phase 7 — Odds API integration, normalization, merge, edge simulation complete

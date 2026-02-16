@@ -444,11 +444,16 @@ def page_inplay_edge():
             st.subheader("In-Play Trade Log")
             ip = inplay.sort_values(["date", "innings_number", "over_number"],
                                     ascending=[False, True, True])
-            display = ip[["date", "batting_team", "bowling_team", "innings_number",
-                           "over_number", "model_probability", "market_prob_1",
-                           "edge", "market_odds_1", "eventual_winner"]].copy()
-            display.columns = ["Date", "Batting", "Bowling", "Inn", "Over",
-                               "Model %", "Market %", "Edge", "Odds", "Winner"]
+            cols = ["date", "batting_team", "bowling_team", "innings_number",
+                    "over_number", "model_probability", "market_prob_1",
+                    "edge", "market_odds_1", "eventual_winner"]
+            col_names = ["Date", "Batting", "Bowling", "Inn", "Over",
+                         "Model %", "Market %", "Edge", "Odds", "Winner"]
+            if "bookmaker_used" in ip.columns:
+                cols.append("bookmaker_used")
+                col_names.append("Source")
+            display = ip[cols].copy()
+            display.columns = col_names
             display["Model %"] = display["Model %"].astype(float).apply(lambda x: f"{x:.1%}")
             display["Market %"] = display["Market %"].astype(float).apply(lambda x: f"{x:.1%}")
             display["Edge"] = display["Edge"].astype(float).apply(lambda x: f"{x:+.1%}")

@@ -66,23 +66,60 @@ def page_overview():
     edge_pre = data["edge_pre"]
     edge_live = data["edge_live"]
     cal = data["calibration"]
+    inplay = data["inplay"]
+    odds_matches = data["odds_matches"]
+    backtest = data["backtest"]
+    bucket_model = data["bucket_model"]
+    high_conf = data["high_conf"]
 
-    c1, c2, c3, c4 = st.columns(4)
+    st.subheader("Platform Statistics")
+    r1c1, r1c2, r1c3, r1c4, r1c5, r1c6 = st.columns(6)
     total_matches = len(elo_hist)
     seasons = elo_hist["season"].nunique()
     teams = len(ratings)
     brier = cal["abs_calibration_error"].mean()
+    best_elo_team = ratings.loc[ratings["rating"].idxmax(), "team"]
+    best_elo_val = ratings["rating"].max()
 
-    c1.metric("Total Matches", f"{total_matches:,}")
-    c2.metric("Seasons", seasons)
-    c3.metric("Teams Tracked", teams)
-    c4.metric("Avg Calibration Error", f"{brier:.3f}")
+    r1c1.metric("Matches Analyzed", f"{total_matches:,}")
+    r1c2.metric("IPL Seasons", seasons)
+    r1c3.metric("Teams Tracked", teams)
+    r1c4.metric("Calibration Error", f"{brier:.3f}")
+    r1c5.metric("Top Rated Team", best_elo_team)
+    r1c6.metric("Top Elo Rating", f"{best_elo_val:.0f}")
 
     st.divider()
+    st.subheader("Model Performance")
+    m1, m2, m3, m4 = st.columns(4)
+
+    avg_brier = backtest["brier_score"].astype(float).mean()
+    avg_accuracy = backtest["accuracy"].astype(float).mean()
+    backtest_windows = len(backtest)
+    best_window_acc = backtest["accuracy"].astype(float).max()
+
+    m1.metric("Avg Brier Score", f"{avg_brier:.3f}", help="Lower is better. 0.25 = coin flip")
+    m2.metric("Avg Accuracy", f"{avg_accuracy:.1%}")
+    m3.metric("Backtest Windows", backtest_windows)
+    m4.metric("Best Window Accuracy", f"{best_window_acc:.1%}")
+
+    m5, m6, m7, m8 = st.columns(4)
+    total_buckets = len(bucket_model)
+    stable_buckets = len(bucket_model[bucket_model["fallback_level"].astype(int) == 1])
+    high_conf_count = len(high_conf)
+    high_conf_matches = high_conf["match_id"].nunique() if len(high_conf) > 0 else 0
+    high_conf_winrate = (high_conf["batting_team"] == high_conf["eventual_winner"]).mean() if len(high_conf) > 0 else 0
+
+    m5.metric("Total Buckets", total_buckets)
+    m6.metric("Stable Buckets (L1)", stable_buckets)
+    m7.metric("High-Conf Snapshots (85%+)", f"{high_conf_count:,}")
+    m8.metric("High-Conf Win Rate", f"{high_conf_winrate:.1%}")
+
+    st.divider()
+    st.subheader("Betting Edge Summary")
     col_l, col_r = st.columns(2)
 
     with col_l:
-        st.subheader("Pre-Match Edge Simulation")
+        st.markdown("**Pre-Match (Elo vs Pinnacle)**")
         pre_df = edge_pre.copy()
         pre_df["threshold"] = pre_df["threshold"].apply(lambda x: f"{float(x):.0%}")
         st.dataframe(
@@ -92,9 +129,12 @@ def page_overview():
             ),
             use_container_width=True, hide_index=True,
         )
+        matches_with_odds = len(odds_matches)
+        avg_overround = odds_matches["market_overround"].astype(float).mean() if "market_overround" in odds_matches.columns else 0
+        st.caption(f"{matches_with_odds} matches with Pinnacle odds | Avg overround: {avg_overround:.2%}")
 
     with col_r:
-        st.subheader("In-Play Edge Simulation (85%+ confidence)")
+        st.markdown("**In-Play (Model vs Market, 85%+ confidence)**")
         if len(edge_live) > 0:
             live_df = edge_live.copy()
             live_df["threshold"] = live_df["threshold"].apply(lambda x: f"{float(x):.0%}")
@@ -105,11 +145,55 @@ def page_overview():
                 ),
                 use_container_width=True, hide_index=True,
             )
+            if len(inplay) > 0:
+                unique_bms = inplay["bookmaker_used"].nunique() if "bookmaker_used" in inplay.columns else 0
+                avg_edge = inplay["edge"].astype(float).mean()
+                st.caption(f"{len(inplay):,} snapshots from {inplay['match_id'].nunique()} matches | "
+                           f"{unique_bms} bookmakers | Avg edge: {avg_edge:.1%}")
         else:
             st.info("In-play odds data pending re-fetch with corrected timestamps.")
 
     st.divider()
-    st.subheader("Current Team Elo Ratings")
+    st.subheader("In-Play Market Coverage")
+    if len(inplay) > 0 and "bookmaker_used" in inplay.columns:
+        bc1, bc2 = st.columns(2)
+        with bc1:
+            bm_counts = inplay["bookmaker_used"].value_counts().reset_index()
+            bm_counts.columns = ["Bookmaker", "Snapshots"]
+            fig_bm = px.pie(bm_counts, values="Snapshots", names="Bookmaker",
+                            color_discrete_sequence=BRAND_COLORS)
+            fig_bm.update_layout(height=300, margin=dict(l=0, r=0, t=10, b=0))
+            st.plotly_chart(fig_bm, use_container_width=True)
+
+        with bc2:
+            inplay_by_inn = inplay.groupby("innings_number").agg(
+                snapshots=("edge", "size"),
+                avg_edge=("edge", lambda x: x.astype(float).mean()),
+                avg_model=("model_probability", lambda x: x.astype(float).mean()),
+                avg_market=("market_prob_1", lambda x: x.astype(float).mean()),
+            ).reset_index()
+            inplay_by_inn.columns = ["Innings", "Snapshots", "Avg Edge", "Avg Model Prob", "Avg Market Prob"]
+            inplay_by_inn["Avg Edge"] = inplay_by_inn["Avg Edge"].apply(lambda x: f"{x:.1%}")
+            inplay_by_inn["Avg Model Prob"] = inplay_by_inn["Avg Model Prob"].apply(lambda x: f"{x:.1%}")
+            inplay_by_inn["Avg Market Prob"] = inplay_by_inn["Avg Market Prob"].apply(lambda x: f"{x:.1%}")
+            st.dataframe(inplay_by_inn, use_container_width=True, hide_index=True)
+
+            edge_vals = inplay["edge"].astype(float)
+            s1, s2, s3, s4 = st.columns(4)
+            s1.metric("Min Edge", f"{edge_vals.min():.1%}")
+            s2.metric("Max Edge", f"{edge_vals.max():.1%}")
+            s3.metric("Median Edge", f"{edge_vals.median():.1%}")
+            s4.metric("Std Dev", f"{edge_vals.std():.1%}")
+
+    st.divider()
+    st.subheader("Elo Ratings & Team Rankings")
+
+    e1, e2, e3 = st.columns(3)
+    elo_ratings = ratings["rating"].astype(float)
+    e1.metric("Highest Rating", f"{elo_ratings.max():.0f}")
+    e2.metric("Lowest Rating", f"{elo_ratings.min():.0f}")
+    e3.metric("Rating Spread", f"{elo_ratings.max() - elo_ratings.min():.0f}")
+
     ratings_sorted = ratings.sort_values("rating", ascending=True)
     fig = px.bar(
         ratings_sorted, x="rating", y="team", orientation="h",

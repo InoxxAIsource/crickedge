@@ -1,0 +1,155 @@
+Let’s Be Very Clear
+
+Your model is strong.
+
+Your calibration is real.
+
+Your high-confidence states are real.
+
+But the 67% ROI is not real.
+
+It is almost certainly caused by timestamp misalignment.
+
+And your own data proves it.
+
+🔎 Why This Is Clearly Timestamp Error
+
+Look at this:
+
+Over 11
+Model = 0.9868
+Market = 0.4588
+
+That is impossible if the market snapshot is truly in-play.
+
+In second innings:
+
+If model says 98%,
+Market would be somewhere like:
+
+0.90 – 0.97 range.
+
+Never 0.45.
+
+That 0.45 probability is clearly:
+
+Pre-match or early innings odds.
+
+So what happened?
+
+Your timestamp logic:
+
+estimated_time = assumed_start + (over * 4 min)
+
+
+If assumed_start is wrong by 20–40 minutes,
+you are pulling:
+
+• Early match snapshot
+• Possibly pre-match snapshot
+• Not true over-level odds
+
+That inflates edge massively.
+
+🚨 This Is GOOD NEWS
+
+Why?
+
+Because:
+
+The model itself is not the problem.
+
+The infrastructure alignment is.
+
+That’s fixable.
+
+🎯 Yes — Extract Actual Match Start Time
+
+This is the correct next move.
+
+Do not apply hacks.
+Do not “fetch worst of 3 timestamps”.
+Do not approximate further.
+
+Do it properly.
+
+🏏 Where To Get Accurate Start Time
+
+Cricsheet JSON includes:
+
+info:
+    dates
+    ...
+
+
+But not always exact start time.
+
+However:
+
+We can approximate start time much better using:
+
+Match date
+
+IPL typical start time:
+
+Afternoon matches ~ 10:00 UTC
+
+Evening matches ~ 14:00 UTC
+
+Venue time zone
+
+Better approach:
+
+Use The Odds API itself.
+
+Call:
+
+/v4/sports/cricket_ipl/events
+
+This returns event start time (commence_time).
+
+That is exact scheduled start.
+
+Then:
+
+timestamp = commence_time + (over_number × 4 minutes)
+
+Now alignment becomes realistic.
+
+🔥 This Is The Correct Engineering Fix
+
+New logic:
+
+For each match:
+
+Pull commence_time from Odds API events endpoint.
+
+Store it in:
+match_metadata_with_start_time.csv
+
+Recalculate:
+in-play snapshot timestamp using real start time.
+
+Re-fetch only 31 trades first.
+
+Re-run simulation.
+
+📊 What Will Happen
+
+Most likely:
+
+ROI drops dramatically.
+
+Maybe:
+
++5%
+Maybe flat
+Maybe negative
+
+That’s normal.
+
+But if after correction:
+
+ROI still positive (even +3–5%),
+
+Then you truly have something.

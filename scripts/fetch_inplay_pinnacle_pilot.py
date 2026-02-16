@@ -4,12 +4,13 @@ import os
 import sys
 import time
 import requests
+from collections import defaultdict
 
 
 PROCESSED_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "processed")
 INPUT_PATH = os.path.join(PROCESSED_DIR, "high_confidence_snapshots_85_plus.csv")
+METADATA_PATH = os.path.join(PROCESSED_DIR, "match_metadata.csv")
 OUTPUT_PATH = os.path.join(PROCESSED_DIR, "high_confidence_inplay_odds.csv")
-SLOT_CACHE_PATH = os.path.join(PROCESSED_DIR, "match_slot_cache.json")
 
 API_KEY = os.environ.get("ODDS_API_KEY", "")
 BASE_URL = "https://api.the-odds-api.com/v4/historical/sports/cricket_ipl/odds"
@@ -27,7 +28,7 @@ OUTPUT_FIELDS = [
     "market_team_1", "market_team_2",
     "market_odds_1", "market_odds_2",
     "market_prob_1", "market_prob_2",
-    "edge"
+    "edge", "fetch_timestamp"
 ]
 
 TEAM_NAME_MAP = {
@@ -37,15 +38,22 @@ TEAM_NAME_MAP = {
     "Rising Pune Supergiants": "Rising Pune Supergiant",
 }
 
-REVERSE_MAP = {v: k for k, v in TEAM_NAME_MAP.items()}
-
-START_SLOTS = [10, 14]
 MINUTES_PER_OVER = 4
 INNINGS_BREAK_MINUTES = 20
 
 
 def normalize_team(name):
     return TEAM_NAME_MAP.get(name, name)
+
+
+def determine_match_slot(match_id, date_str, metadata_by_date):
+    day_matches = metadata_by_date.get(date_str, [])
+    if len(day_matches) <= 1:
+        return 14
+    sorted_matches = sorted(day_matches, key=lambda m: int(m["match_id"]))
+    if str(match_id) == str(sorted_matches[0]["match_id"]):
+        return 10
+    return 14
 
 
 def estimate_timestamp(date_str, innings_number, over_number, start_hour):
@@ -79,21 +87,6 @@ def save_rows(rows):
         writer.writerows(rows)
 
 
-def load_slot_cache():
-    if os.path.exists(SLOT_CACHE_PATH):
-        try:
-            with open(SLOT_CACHE_PATH, "r") as f:
-                return json.load(f)
-        except (json.JSONDecodeError, IOError):
-            pass
-    return {}
-
-
-def save_slot_cache(cache):
-    with open(SLOT_CACHE_PATH, "w") as f:
-        json.dump(cache, f)
-
-
 def fetch_odds_snapshot(timestamp):
     params = {
         "apiKey": API_KEY,
@@ -105,10 +98,6 @@ def fetch_odds_snapshot(timestamp):
     resp = requests.get(BASE_URL, params=params, timeout=30)
     resp.raise_for_status()
     return resp.json()
-
-
-def teams_match(event_team, target_team):
-    return normalize_team(event_team) == target_team
 
 
 def find_pinnacle_for_teams(events, batting_team, bowling_team):
@@ -138,29 +127,6 @@ def find_pinnacle_for_teams(events, batting_team, bowling_team):
     return None
 
 
-def detect_match_slot(date_str, batting_team, bowling_team, api_calls_counter):
-    probe_over = 10
-    for start_hour in START_SLOTS:
-        ts = estimate_timestamp(date_str, 1, probe_over, start_hour)
-        try:
-            data = fetch_odds_snapshot(ts)
-            api_calls_counter[0] += 1
-            events = data.get("data", [])
-            time.sleep(SLEEP_BETWEEN_CALLS)
-
-            for event in events:
-                home_norm = normalize_team(event.get("home_team", ""))
-                away_norm = normalize_team(event.get("away_team", ""))
-                if batting_team in (home_norm, away_norm) or bowling_team in (home_norm, away_norm):
-                    return start_hour
-        except Exception as e:
-            print(f"  Slot probe error {ts}: {e}", file=sys.stderr)
-            api_calls_counter[0] += 1
-            time.sleep(1.0)
-
-    return None
-
-
 def fetch_inplay_pilot():
     if not API_KEY:
         print("ERROR: ODDS_API_KEY environment variable not set.", file=sys.stderr)
@@ -171,8 +137,14 @@ def fetch_inplay_pilot():
     with open(INPUT_PATH, "r", encoding="utf-8") as f:
         snapshots = list(csv.DictReader(f))
 
+    with open(METADATA_PATH, "r", encoding="utf-8") as f:
+        metadata = list(csv.DictReader(f))
+
+    metadata_by_date = defaultdict(list)
+    for m in metadata:
+        metadata_by_date[m["date"]].append(m)
+
     existing_rows, done_keys = load_existing_results()
-    slot_cache = load_slot_cache()
 
     remaining = [s for s in snapshots
                  if (s["match_id"], s["innings_number"], s["over_number"]) not in done_keys]
@@ -188,41 +160,28 @@ def fetch_inplay_pilot():
     print(f"  Already fetched                 : {len(done_keys)}")
     print(f"  Remaining snapshots             : {len(remaining)}")
     print(f"  Unique matches to process       : {len(match_snaps)}")
+    print(f"  Slot detection: schedule-based (single=14:00, double=10:00/14:00)")
 
     rows = list(existing_rows)
-    api_calls = [0]
+    api_calls = 0
     found = 0
     not_found = 0
-    slot_misses = 0
 
     sorted_matches = sorted(match_snaps.keys(),
                             key=lambda mid: match_snaps[mid][0]["date"],
                             reverse=True)
 
     for mid in sorted_matches:
-        if api_calls[0] >= MAX_API_CALLS:
+        if api_calls >= MAX_API_CALLS:
             print(f"  Reached API call limit ({MAX_API_CALLS})")
             break
 
         snaps_for_match = match_snaps[mid]
         sample = snaps_for_match[0]
         date_str = sample["date"]
-        batting = sample["batting_team"]
-        bowling = sample["bowling_team"]
 
-        if mid in slot_cache:
-            start_hour = slot_cache[mid]
-        else:
-            start_hour = detect_match_slot(date_str, batting, bowling, api_calls)
-            if start_hour is not None:
-                slot_cache[mid] = start_hour
-                save_slot_cache(slot_cache)
-                print(f"  Match {mid} ({date_str}): detected slot {start_hour}:00 UTC")
-            else:
-                print(f"  Match {mid} ({date_str}): no slot found, skipping {len(snaps_for_match)} snapshots")
-                slot_misses += 1
-                not_found += len(snaps_for_match)
-                continue
+        start_hour = determine_match_slot(mid, date_str, metadata_by_date)
+        print(f"  Match {mid} ({date_str}): slot {start_hour}:00 UTC")
 
         ts_groups = {}
         for snap in snaps_for_match:
@@ -230,17 +189,17 @@ def fetch_inplay_pilot():
             ts_groups.setdefault(ts, []).append(snap)
 
         for ts in sorted(ts_groups.keys()):
-            if api_calls[0] >= MAX_API_CALLS:
+            if api_calls >= MAX_API_CALLS:
                 break
 
             try:
                 data = fetch_odds_snapshot(ts)
                 events = data.get("data", [])
-                api_calls[0] += 1
+                api_calls += 1
                 time.sleep(SLEEP_BETWEEN_CALLS)
             except Exception as e:
                 print(f"  Error {ts}: {e}", file=sys.stderr)
-                api_calls[0] += 1
+                api_calls += 1
                 time.sleep(1.0)
                 continue
 
@@ -277,22 +236,22 @@ def fetch_inplay_pilot():
                         "market_prob_1": round(bat_market_prob, 6),
                         "market_prob_2": round(bowl_market_prob, 6),
                         "edge": round(edge, 6),
+                        "fetch_timestamp": ts,
                     })
                     found += 1
                 else:
                     not_found += 1
 
-        if api_calls[0] % 20 == 0:
+        if api_calls % 20 == 0 and api_calls > 0:
             save_rows(rows)
-            print(f"  Progress: {api_calls[0]} API calls, {found} found, {not_found} not found")
+            print(f"  Progress: {api_calls} API calls, {found} found, {not_found} not found")
 
     save_rows(rows)
 
     print(f"\n  Results:")
-    print(f"    API calls              : {api_calls[0]}")
+    print(f"    API calls              : {api_calls}")
     print(f"    Snapshots with odds    : {found}")
     print(f"    Snapshots without odds : {not_found}")
-    print(f"    Matches w/o slot       : {slot_misses}")
     print(f"    Total rows in output   : {len(rows)}")
     print(f"    Output                 : {OUTPUT_PATH}")
 

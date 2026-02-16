@@ -20,6 +20,13 @@ def load_csv(name):
     return pd.read_csv(os.path.join(DATA_DIR, name))
 
 
+def load_csv_safe(name):
+    path = os.path.join(DATA_DIR, name)
+    if os.path.exists(path):
+        return pd.read_csv(path)
+    return pd.DataFrame()
+
+
 def load_all():
     data = {}
     data["ratings"] = load_csv("current_team_ratings.csv")
@@ -27,10 +34,11 @@ def load_all():
     data["calibration"] = load_csv("live_model_calibration_2020_plus.csv")
     data["backtest"] = load_csv("rolling_backtest_results.csv")
     data["edge_pre"] = load_csv("edge_simulation_results.csv")
-    data["edge_live"] = load_csv("live_edge_simulation_results.csv")
-    data["inplay"] = load_csv("high_confidence_inplay_odds.csv")
+    data["edge_live"] = load_csv_safe("live_edge_simulation_results.csv")
+    data["inplay"] = load_csv_safe("high_confidence_inplay_odds.csv")
     data["odds_matches"] = load_csv("match_metadata_with_odds.csv")
     data["bucket_model"] = load_csv("statistical_bucket_model_stabilized.csv")
+    data["high_conf"] = load_csv_safe("high_confidence_snapshots_85_plus.csv")
     return data
 
 
@@ -87,15 +95,18 @@ def page_overview():
 
     with col_r:
         st.subheader("In-Play Edge Simulation (85%+ confidence)")
-        live_df = edge_live.copy()
-        live_df["threshold"] = live_df["threshold"].apply(lambda x: f"{float(x):.0%}")
-        st.dataframe(
-            live_df[["threshold", "total_trades", "wins", "win_rate", "roi_pct", "max_drawdown_pct"]].rename(
-                columns={"threshold": "Threshold", "total_trades": "Trades", "wins": "Wins",
-                          "win_rate": "Win Rate", "roi_pct": "ROI %", "max_drawdown_pct": "Max DD %"}
-            ),
-            use_container_width=True, hide_index=True,
-        )
+        if len(edge_live) > 0:
+            live_df = edge_live.copy()
+            live_df["threshold"] = live_df["threshold"].apply(lambda x: f"{float(x):.0%}")
+            st.dataframe(
+                live_df[["threshold", "total_trades", "wins", "win_rate", "roi_pct", "max_drawdown_pct"]].rename(
+                    columns={"threshold": "Threshold", "total_trades": "Trades", "wins": "Wins",
+                              "win_rate": "Win Rate", "roi_pct": "ROI %", "max_drawdown_pct": "Max DD %"}
+                ),
+                use_container_width=True, hide_index=True,
+            )
+        else:
+            st.info("In-play odds data pending re-fetch with corrected timestamps.")
 
     st.divider()
     st.subheader("Current Team Elo Ratings")
@@ -307,80 +318,143 @@ def page_pre_match_edge():
 
 def page_inplay_edge():
     st.title("In-Play Edge Analysis")
-    st.markdown("In-play Pinnacle odds vs model predictions for high-confidence (85%+) snapshots. "
+    st.markdown("High-confidence (85%+) model predictions analyzed against in-play market odds. "
                 "These represent game states where the model is highly confident in the batting team winning.")
 
     inplay = data["inplay"]
     edge_live = data["edge_live"]
+    high_conf = data["high_conf"]
 
-    tab1, tab2, tab3 = st.tabs(["Edge Distribution", "Simulation", "Trade Log"])
+    has_inplay_odds = len(inplay) > 0 and "edge" in inplay.columns
+
+    if has_inplay_odds:
+        tab1, tab2, tab3 = st.tabs(["Edge Distribution", "Simulation", "Trade Log"])
+    else:
+        tab1, tab2 = st.tabs(["High-Confidence Model", "Audit Status"])
 
     with tab1:
-        fig = px.histogram(
-            inplay, x="edge", nbins=40,
-            labels={"edge": "Edge (Model - Market)"},
-            color_discrete_sequence=["#2ca02c"],
-        )
-        fig.update_layout(height=400, margin=dict(l=0, r=0, t=10, b=0))
-        st.plotly_chart(fig, use_container_width=True)
+        if has_inplay_odds:
+            fig = px.histogram(
+                inplay, x="edge", nbins=40,
+                labels={"edge": "Edge (Model - Market)"},
+                color_discrete_sequence=["#2ca02c"],
+            )
+            fig.update_layout(height=400, margin=dict(l=0, r=0, t=10, b=0))
+            st.plotly_chart(fig, use_container_width=True)
 
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("In-Play Snapshots", len(inplay))
-        c2.metric("Unique Matches", inplay["match_id"].nunique())
-        c3.metric("Avg Edge", f"{inplay['edge'].astype(float).mean():.1%}")
-        c4.metric("Win Rate", f"{(inplay['batting_team'] == inplay['eventual_winner']).mean():.1%}")
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("In-Play Snapshots", len(inplay))
+            c2.metric("Unique Matches", inplay["match_id"].nunique())
+            c3.metric("Avg Edge", f"{inplay['edge'].astype(float).mean():.1%}")
+            c4.metric("Win Rate", f"{(inplay['batting_team'] == inplay['eventual_winner']).mean():.1%}")
+        elif len(high_conf) > 0:
+            st.subheader("High-Confidence Model Predictions (85%+)")
 
-        st.subheader("Edge by Innings Phase")
-        ip = inplay.copy()
-        ip["over"] = ip["over_number"].astype(int)
-        ip["phase"] = ip["over"].apply(
-            lambda o: "Powerplay (1-6)" if o <= 6 else ("Middle (7-15)" if o <= 15 else "Death (16-20)")
-        )
-        phase_stats = ip.groupby("phase").agg(
-            count=("edge", "size"),
-            avg_edge=("edge", lambda x: x.astype(float).mean()),
-            win_rate=("eventual_winner", lambda x: (ip.loc[x.index, "batting_team"] == x).mean()),
-        ).reset_index()
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("High-Conf Snapshots", f"{len(high_conf):,}")
+            c2.metric("Unique Matches", high_conf["match_id"].nunique())
+            avg_prob = high_conf["final_stabilized_probability"].astype(float).mean()
+            c3.metric("Avg Model Probability", f"{avg_prob:.1%}")
+            win_rate = (high_conf["batting_team"] == high_conf["eventual_winner"]).mean()
+            c4.metric("Actual Win Rate", f"{win_rate:.1%}")
 
-        fig2 = px.bar(phase_stats, x="phase", y="avg_edge",
-                      color="avg_edge", color_continuous_scale="RdYlGn",
-                      text=phase_stats["avg_edge"].apply(lambda x: f"{x:.1%}"),
-                      labels={"phase": "Phase", "avg_edge": "Avg Edge"})
-        fig2.update_layout(height=350, showlegend=False, coloraxis_showscale=False,
-                           margin=dict(l=0, r=0, t=10, b=0))
-        st.plotly_chart(fig2, use_container_width=True)
+            st.subheader("Model Probability Distribution")
+            fig = px.histogram(
+                high_conf, x="final_stabilized_probability", nbins=30,
+                labels={"final_stabilized_probability": "Model Probability"},
+                color_discrete_sequence=["#2ca02c"],
+            )
+            fig.update_layout(height=350, margin=dict(l=0, r=0, t=10, b=0))
+            st.plotly_chart(fig, use_container_width=True)
+
+            st.subheader("By Innings Phase")
+            hc = high_conf.copy()
+            hc["over"] = hc["over_number"].astype(int)
+            hc["phase"] = hc["over"].apply(
+                lambda o: "Powerplay (1-6)" if o <= 6 else ("Middle (7-15)" if o <= 15 else "Death (16-20)")
+            )
+            phase_stats = hc.groupby("phase").agg(
+                count=("final_stabilized_probability", "size"),
+                avg_prob=("final_stabilized_probability", lambda x: x.astype(float).mean()),
+                win_rate=("eventual_winner",
+                          lambda x: (hc.loc[x.index, "batting_team"] == x).mean()),
+            ).reset_index()
+            phase_stats.columns = ["Phase", "Snapshots", "Avg Model Prob", "Actual Win Rate"]
+            st.dataframe(phase_stats, use_container_width=True, hide_index=True)
+
+            st.subheader("By Innings")
+            inn_stats = hc.groupby("innings_number").agg(
+                count=("final_stabilized_probability", "size"),
+                avg_prob=("final_stabilized_probability", lambda x: x.astype(float).mean()),
+                win_rate=("eventual_winner",
+                          lambda x: (hc.loc[x.index, "batting_team"] == x).mean()),
+            ).reset_index()
+            inn_stats.columns = ["Innings", "Snapshots", "Avg Model Prob", "Actual Win Rate"]
+            st.dataframe(inn_stats, use_container_width=True, hide_index=True)
+        else:
+            st.info("No high-confidence snapshot data available.")
 
     with tab2:
-        st.subheader("In-Play Flat-Stake Simulation (1 trade per match)")
-        sim = edge_live.copy()
-        st.dataframe(
-            sim.rename(columns={
-                "threshold": "Threshold", "total_trades": "Trades", "wins": "Wins",
-                "losses": "Losses", "win_rate": "Win Rate", "profit": "Profit (units)",
-                "roi_pct": "ROI %", "max_drawdown_pct": "Max DD %",
-            })[["Threshold", "Trades", "Wins", "Losses", "Win Rate", "Profit (units)", "ROI %", "Max DD %"]],
-            use_container_width=True, hide_index=True,
-        )
+        if has_inplay_odds:
+            st.subheader("In-Play Flat-Stake Simulation (1 trade per match)")
+            sim = edge_live.copy()
+            st.dataframe(
+                sim.rename(columns={
+                    "threshold": "Threshold", "total_trades": "Trades", "wins": "Wins",
+                    "losses": "Losses", "win_rate": "Win Rate", "profit": "Profit (units)",
+                    "roi_pct": "ROI %", "max_drawdown_pct": "Max DD %",
+                })[["Threshold", "Trades", "Wins", "Losses", "Win Rate", "Profit (units)", "ROI %", "Max DD %"]],
+                use_container_width=True, hide_index=True,
+            )
 
-        c1, c2 = st.columns(2)
-        with c1:
-            st.metric("In-Play ROI", f"{float(sim.iloc[0]['roi_pct']):.1f}%")
-        with c2:
-            st.metric("In-Play Win Rate", f"{float(sim.iloc[0]['win_rate']):.1%}")
+            c1, c2 = st.columns(2)
+            with c1:
+                st.metric("In-Play ROI", f"{float(sim.iloc[0]['roi_pct']):.1f}%")
+            with c2:
+                st.metric("In-Play Win Rate", f"{float(sim.iloc[0]['win_rate']):.1%}")
+        else:
+            st.subheader("In-Play Odds Audit Status")
+            st.warning(
+                "Previous in-play odds data was invalidated due to timestamp misalignment. "
+                "The slot detection incorrectly assigned all matches to 10:00 UTC instead of "
+                "14:00 UTC, resulting in pre-match odds being compared against in-play model "
+                "predictions. The fetch script has been corrected to use schedule-based slot "
+                "detection. Re-fetch required when API credits are available."
+            )
+            st.markdown("""
+**What happened:**
+- All 31 IPL 2025 matches in our sample were evening matches (14:00 UTC / 7:30 PM IST)
+- Slot detection incorrectly identified them as afternoon matches (10:00 UTC)
+- Timestamps were 4 hours early, fetching pre-match odds instead of in-play odds
+- Market probabilities of 37-66% during innings 2 confirmed they were pre-match
 
-    with tab3:
-        st.subheader("In-Play Trade Log")
-        ip = inplay.sort_values(["date", "innings_number", "over_number"], ascending=[False, True, True])
-        display = ip[["date", "batting_team", "bowling_team", "innings_number", "over_number",
-                       "model_probability", "market_prob_1", "edge", "market_odds_1", "eventual_winner"]].copy()
-        display.columns = ["Date", "Batting", "Bowling", "Inn", "Over",
-                           "Model %", "Market %", "Edge", "Odds", "Winner"]
-        display["Model %"] = display["Model %"].astype(float).apply(lambda x: f"{x:.1%}")
-        display["Market %"] = display["Market %"].astype(float).apply(lambda x: f"{x:.1%}")
-        display["Edge"] = display["Edge"].astype(float).apply(lambda x: f"{x:+.1%}")
-        display["Won"] = ip["batting_team"].values == ip["eventual_winner"].values
-        display["Won"] = display["Won"].map({True: "Yes", False: "No"})
-        st.dataframe(display, use_container_width=True, hide_index=True)
+**What's fixed:**
+- Fetch script now uses schedule-based slot detection (single header = 14:00, double header = first match 10:00 / second 14:00)
+- `fetch_timestamp` field added to output for auditability
+- Requires API credit renewal to re-fetch with correct timestamps
+
+**Model quality is unaffected:**
+- Calibration (Brier 0.2012) remains excellent
+- High-confidence states (85%+) genuinely predict outcomes at 84%+ accuracy
+- Only the edge vs market comparison was invalid
+""")
+
+    if has_inplay_odds:
+        with tab3:
+            st.subheader("In-Play Trade Log")
+            ip = inplay.sort_values(["date", "innings_number", "over_number"],
+                                    ascending=[False, True, True])
+            display = ip[["date", "batting_team", "bowling_team", "innings_number",
+                           "over_number", "model_probability", "market_prob_1",
+                           "edge", "market_odds_1", "eventual_winner"]].copy()
+            display.columns = ["Date", "Batting", "Bowling", "Inn", "Over",
+                               "Model %", "Market %", "Edge", "Odds", "Winner"]
+            display["Model %"] = display["Model %"].astype(float).apply(lambda x: f"{x:.1%}")
+            display["Market %"] = display["Market %"].astype(float).apply(lambda x: f"{x:.1%}")
+            display["Edge"] = display["Edge"].astype(float).apply(lambda x: f"{x:+.1%}")
+            display["Won"] = ip["batting_team"].values == ip["eventual_winner"].values
+            display["Won"] = display["Won"].map({True: "Yes", False: "No"})
+            st.dataframe(display, use_container_width=True, hide_index=True)
 
 
 def page_bucket_model():

@@ -1,0 +1,129 @@
+Do NOT fetch full historical in-play odds right now.
+
+Here’s why:
+
+13,000+ credits is a large chunk of your 20K/month plan.
+
+If the live model turns out weak, you just burned budget.
+
+You haven’t yet validated whether your live model is strong enough to justify deep market comparison.
+
+In-play simulation logic is more complex (entry + exit timing).
+
+You risk overfitting to sparse in-play snapshots.
+
+You don’t escalate cost before proving signal strength.
+
+✅ What You Should Do Next (Smart Path)
+
+You already have:
+
+• Stabilized over-by-over probability model
+• 3-year rolling validation
+• Market closing odds baseline
+• Honest pre-match edge results
+
+Now we test something critical first:
+
+📊 Phase 8 — Live Probability Strength Test (Without Market)
+
+Before comparing to in-play odds,
+we measure intrinsic strength of your live model.
+
+Specifically:
+
+For over snapshots (2020–2025 matches only):
+
+Bucket model probability at each over.
+
+Group predictions into deciles.
+
+Check calibration:
+
+When model says 70–80%, does team win ~75%?
+
+When model says 80–90%, does team win ~85%?
+
+Compute Brier score per over phase.
+
+Measure sharpness:
+
+How often does model reach >80%?
+
+How often >90%?
+
+Are those states actually decisive?
+
+If your live model:
+
+• Is well calibrated
+• Shows strong separation
+• Has high-probability states with high true win rate
+
+Then it’s worth paying for in-play odds.
+
+If it’s mediocre → refine model first.
+
+🎯 Why This Is The Right Order
+
+Think like a quant firm:
+
+Step 1 → Validate predictive strength.
+Step 2 → Compare to market.
+Step 3 → Deploy capital.
+
+You just did Step 2 for pre-match and saw modest results.
+
+Now we validate Step 1 for live model.
+
+🚀 Next Prompt for Replit
+
+Paste this:
+
+Phase 8: Live Model Calibration & Strength Test
+
+Using over_state_snapshots_enriched.csv (2020+ matches only):
+
+1. For each over snapshot:
+   - Get stabilized win probability
+   - Compare to actual match result
+
+2. Group predictions into deciles:
+   0–10%
+   10–20%
+   ...
+   90–100%
+
+3. For each decile:
+   - Count samples
+   - Compute actual win rate
+   - Compute average predicted probability
+
+4. Also compute:
+   - Overall Brier score (2020+ only)
+   - Brier score by phase:
+       Powerplay (1–6)
+       Middle (7–15)
+       Death (16–20)
+   - Frequency of predictions:
+       >70%
+       >80%
+       >90%
+
+5. Save as:
+   data/processed/live_model_calibration_2020_plus.csv
+
+🔥 What We Want To See
+
+If model is strong:
+
+• 80–90% decile actually wins ~80–90%
+• 90%+ states are rare but accurate
+• Brier score remains stable
+• Late overs show strong separation
+
+If model is weak:
+
+• Overconfident buckets
+• Poor calibration in death overs
+• Random-looking deciles

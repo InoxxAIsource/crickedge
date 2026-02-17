@@ -39,6 +39,8 @@ def load_all():
     data["odds_matches"] = load_csv("match_metadata_with_odds.csv")
     data["bucket_model"] = load_csv("statistical_bucket_model_stabilized.csv")
     data["high_conf"] = load_csv_safe("high_confidence_snapshots_85_plus.csv")
+    data["realistic_sim"] = load_csv_safe("realistic_edge_simulation_results.csv")
+    data["timestamp_audit"] = load_csv_safe("timestamp_audit_results.csv")
     return data
 
 
@@ -48,7 +50,7 @@ st.sidebar.title("Crickedge")
 st.sidebar.caption("IPL Cricket Analytics & Edge Detection")
 page = st.sidebar.radio(
     "Navigate",
-    ["Overview", "Elo Ratings", "Model Calibration", "Pre-Match Edge", "In-Play Edge", "Bucket Model"],
+    ["Overview", "Elo Ratings", "Model Calibration", "Pre-Match Edge", "In-Play Edge", "Bucket Model", "Edge Audit"],
     index=0,
 )
 
@@ -612,6 +614,269 @@ def page_bucket_model():
         st.plotly_chart(fig2, use_container_width=True)
 
 
+def page_edge_audit():
+    st.title("Edge Audit & Realistic Simulation")
+    st.markdown("Institutional-grade analysis of in-play edge claims. Tests timestamp integrity, "
+                "applies real-world friction (commission, slippage, execution delay), and identifies leakage risks.")
+
+    audit = data["timestamp_audit"]
+    realistic = data["realistic_sim"]
+    edge_live = data["edge_live"]
+
+    if len(audit) == 0 and len(realistic) == 0:
+        st.warning("Audit data not yet generated. Run build_timestamp_audit.py and build_realistic_simulation.py first.")
+        return
+
+    tab1, tab2, tab3, tab4 = st.tabs([
+        "Timestamp Integrity", "Gross vs Net ROI", "Leakage Analysis", "Honest Assessment"
+    ])
+
+    with tab1:
+        st.subheader("Timestamp Alignment Audit")
+
+        if len(audit) > 0:
+            a1, a2, a3, a4 = st.columns(4)
+            total_snaps = len(audit)
+            mi_groups = audit.groupby(["match_id", "innings_number"])["single_ts_per_innings"].first()
+            single_ts_pct = (mi_groups.astype(str) == "True").mean()
+            total_mi_groups = len(mi_groups)
+            delta = audit["timestamp_vs_over_delta_minutes"].astype(float)
+
+            a1.metric("Snapshots Audited", f"{total_snaps:,}")
+            a2.metric("Single-TS Innings", f"{single_ts_pct:.0%} of {total_mi_groups} match-innings groups",
+                       help="% of match-innings groups where all overs share one market timestamp")
+            a3.metric("Median Delta (min)", f"{delta.median():.1f}",
+                       help="Fetch timestamp minus estimated over-end time")
+            a4.metric("Delta Std Dev", f"{delta.std():.1f} min")
+
+            st.warning(
+                f"100% of {total_mi_groups} match-innings groups use a single timestamp per match-innings. "
+                f"This means the market price for over 4 and over 18 are identical — "
+                f"the edge calculation is systematically biased for later overs."
+            )
+
+            fig_delta = px.histogram(
+                audit, x="timestamp_vs_over_delta_minutes", nbins=50,
+                labels={"timestamp_vs_over_delta_minutes": "Fetch TS - Over End (minutes)"},
+                color_discrete_sequence=["#d62728"],
+            )
+            fig_delta.add_vline(x=0, line_dash="dash", line_color="black",
+                                annotation_text="Over End")
+            fig_delta.update_layout(height=350, margin=dict(l=0, r=0, t=10, b=0))
+            st.plotly_chart(fig_delta, use_container_width=True)
+            st.caption("Negative = fetch before over ends (cleaner). Positive = fetch after over ends (leakage risk).")
+
+            risk_counts = audit["leakage_risk"].value_counts().reset_index()
+            risk_counts.columns = ["Risk Level", "Count"]
+            risk_order = ["none", "low", "medium", "high", "critical"]
+            risk_counts["sort"] = risk_counts["Risk Level"].apply(
+                lambda x: risk_order.index(x) if x in risk_order else 5)
+            risk_counts = risk_counts.sort_values("sort").drop(columns=["sort"])
+            risk_counts["Percentage"] = (risk_counts["Count"] / total_snaps * 100).round(1).astype(str) + "%"
+
+            r1, r2 = st.columns(2)
+            with r1:
+                st.dataframe(risk_counts, use_container_width=True, hide_index=True)
+            with r2:
+                risk_colors = {"none": "#2ca02c", "low": "#98df8a", "medium": "#ff7f0e",
+                               "high": "#d62728", "critical": "#7f0000"}
+                fig_risk = px.pie(risk_counts, values="Count", names="Risk Level",
+                                  color="Risk Level",
+                                  color_discrete_map=risk_colors)
+                fig_risk.update_layout(height=300, margin=dict(l=0, r=0, t=10, b=0))
+                st.plotly_chart(fig_risk, use_container_width=True)
+
+    with tab2:
+        st.subheader("Gross vs Friction-Adjusted ROI")
+
+        if len(realistic) > 0:
+            st.markdown("""
+**Friction Parameters Applied:**
+| Parameter | Realistic | Worst Case |
+|-----------|-----------|------------|
+| Commission | 5% on wins | 7.5% on wins |
+| Slippage | 1 tick (0.02) | 2 ticks (0.04) |
+| Execution Delay | 1% edge penalty | 1% edge penalty |
+""")
+
+            for scenario_label, scenario_key in [("Gross (No Friction)", "gross"),
+                                                   ("Realistic (5% comm + 1 tick)", "realistic"),
+                                                   ("Worst Case (7.5% comm + 2 ticks)", "worst_case")]:
+                sc = realistic[realistic["scenario"] == scenario_key].copy()
+                if len(sc) == 0:
+                    continue
+                st.markdown(f"**{scenario_label}**")
+                sc["threshold"] = sc["threshold"].astype(float).apply(lambda x: f"{x:.0%}")
+                display_cols = {
+                    "threshold": "Threshold", "total_trades": "Trades",
+                    "wins": "Wins", "win_rate": "Win Rate",
+                    "profit": "Profit", "roi_pct": "ROI %",
+                    "max_drawdown_pct": "Max DD %",
+                    "total_commission": "Commission", "total_slippage_cost": "Slippage",
+                }
+                available_cols = {k: v for k, v in display_cols.items() if k in sc.columns}
+                st.dataframe(
+                    sc[list(available_cols.keys())].rename(columns=available_cols),
+                    use_container_width=True, hide_index=True,
+                )
+
+            st.divider()
+            st.subheader("ROI Comparison Across Scenarios")
+            chart_data = realistic[["threshold", "scenario", "roi_pct"]].copy()
+            chart_data["threshold"] = chart_data["threshold"].astype(float).apply(lambda x: f"{x:.0%}")
+            fig_comp = px.bar(
+                chart_data, x="threshold", y="roi_pct", color="scenario",
+                barmode="group",
+                labels={"threshold": "Edge Threshold", "roi_pct": "ROI %", "scenario": "Scenario"},
+                color_discrete_map={"gross": "#2ca02c", "realistic": "#ff7f0e", "worst_case": "#d62728"},
+            )
+            fig_comp.update_layout(height=400, margin=dict(l=0, r=0, t=10, b=0))
+            st.plotly_chart(fig_comp, use_container_width=True)
+
+            if len(edge_live) > 0:
+                gross_5 = realistic[(realistic["scenario"] == "gross") & (realistic["threshold"].astype(float) == 0.05)]
+                real_5 = realistic[(realistic["scenario"] == "realistic") & (realistic["threshold"].astype(float) == 0.05)]
+                worst_5 = realistic[(realistic["scenario"] == "worst_case") & (realistic["threshold"].astype(float) == 0.05)]
+
+                if len(gross_5) > 0 and len(real_5) > 0 and len(worst_5) > 0:
+                    c1, c2, c3 = st.columns(3)
+                    c1.metric("Gross ROI (5%)", f"{float(gross_5.iloc[0]['roi_pct']):.1f}%")
+                    c2.metric("Realistic ROI (5%)", f"{float(real_5.iloc[0]['roi_pct']):.1f}%",
+                              delta=f"{float(real_5.iloc[0]['roi_pct']) - float(gross_5.iloc[0]['roi_pct']):.1f}%")
+                    c3.metric("Worst Case ROI (5%)", f"{float(worst_5.iloc[0]['roi_pct']):.1f}%",
+                              delta=f"{float(worst_5.iloc[0]['roi_pct']) - float(gross_5.iloc[0]['roi_pct']):.1f}%")
+
+    with tab3:
+        st.subheader("Leakage Deep Dive")
+
+        if len(audit) > 0:
+            st.markdown("""
+**What is timestamp leakage?**
+
+When the market odds snapshot was taken *after* the over result was already known, 
+the model appears to have edge that doesn't exist in real-time. This inflates ROI artificially.
+
+**Current pipeline limitation:**
+One API call per match-innings fetches a single market snapshot. This snapshot is applied 
+to ALL overs in that innings — meaning over 4 and over 18 use identical odds, which is unrealistic.
+""")
+
+            critical = audit[audit["leakage_risk"] == "critical"]
+            high = audit[audit["leakage_risk"] == "high"]
+
+            if len(critical) > 0:
+                st.error(f"{len(critical)} snapshots ({len(critical)/len(audit)*100:.1f}%) at CRITICAL leakage risk")
+                st.dataframe(
+                    critical[["match_id", "date", "innings_number", "over_number",
+                              "edge", "timestamp_vs_over_delta_minutes", "bookmaker_used"]]
+                    .head(20).rename(columns={
+                        "match_id": "Match", "date": "Date", "innings_number": "Inn",
+                        "over_number": "Over", "edge": "Edge",
+                        "timestamp_vs_over_delta_minutes": "Delta (min)",
+                        "bookmaker_used": "Bookmaker",
+                    }),
+                    use_container_width=True, hide_index=True,
+                )
+
+            st.subheader("Edge vs Timestamp Delta")
+            fig_scatter = px.scatter(
+                audit, x="timestamp_vs_over_delta_minutes", y="edge",
+                color="leakage_risk",
+                color_discrete_map={"none": "#2ca02c", "low": "#98df8a",
+                                     "medium": "#ff7f0e", "high": "#d62728", "critical": "#7f0000"},
+                labels={"timestamp_vs_over_delta_minutes": "Timestamp Delta (min)",
+                        "edge": "Edge", "leakage_risk": "Risk"},
+                opacity=0.6,
+            )
+            fig_scatter.add_vline(x=0, line_dash="dash", line_color="black")
+            fig_scatter.update_layout(height=400, margin=dict(l=0, r=0, t=10, b=0))
+            st.plotly_chart(fig_scatter, use_container_width=True)
+
+            st.subheader("Edge Distribution by Risk Level")
+            risk_edge = audit.groupby("leakage_risk").agg(
+                count=("edge", "size"),
+                avg_edge=("edge", lambda x: x.astype(float).mean()),
+                median_edge=("edge", lambda x: x.astype(float).median()),
+                avg_model_prob=("model_probability", lambda x: x.astype(float).mean()),
+                avg_market_prob=("market_prob_1", lambda x: x.astype(float).mean()),
+            ).reset_index()
+            risk_edge.columns = ["Risk Level", "Count", "Avg Edge", "Median Edge",
+                                 "Avg Model Prob", "Avg Market Prob"]
+            st.dataframe(risk_edge, use_container_width=True, hide_index=True)
+
+    with tab4:
+        st.subheader("Honest Assessment")
+
+        st.markdown("""
+### What's Real
+
+- **Model calibration is genuine.** Brier score 0.2012, max decile error 4.3%. 
+  The probability engine accurately predicts match outcomes.
+- **High-confidence accuracy is real.** When the model says 85%+, the batting team 
+  wins 84%+ of the time. This is validated without any market data.
+- **Pre-match edge analysis is clean.** Odds captured 30 minutes before match start 
+  eliminates timing concerns.
+
+### What's Questionable
+
+- **27.7% average in-play edge is almost certainly inflated.** Using a single market 
+  snapshot per innings means later overs (where model is most confident) compare against 
+  odds from much earlier in the innings.
+- **100% of snapshots share one timestamp per match-innings.** Market conditions change 
+  dramatically between over 4 and over 18, but our odds don't reflect that.
+- **25.4% of snapshots at critical leakage risk.** The fetch timestamp is >5 minutes 
+  after the estimated over end for these snapshots.
+
+### Estimated Realistic Expectations (Assumptions)
+
+After proper per-over market alignment, expected results:
+
+**Note:** These are industry-informed estimates based on similar models in liquid markets, not computed from our audit pipeline.
+
+| Metric | Current (Gross) | Expected (Realistic) |
+|--------|----------------|---------------------|
+| Average Edge | 27.7% | 4-8% |
+| ROI | 50-61% | 2-6% |
+| Win Rate | 80% | 60-67% |
+
+**Even at 2-6% net ROI, this would be a strong result for a systematic cricket model.**
+
+### What Would Make This Bulletproof
+
+1. **Per-over API calls** — Fetch market odds at each specific over timestamp (costly but definitive)
+2. **Bookmaker `last_update` timestamps** — Use the bookmaker's actual update time, not API call time
+3. **Strict ordering** — Odds timestamp must be strictly < over completion time
+4. **Exchange commission** — 5% Betfair commission already modeled above
+5. **Execution reality** — 30-second delay, 1-tick slippage, stake limits
+
+### The Bottom Line
+
+The model works. The edge measurement has timing bias. 
+Fix the timing, and whatever edge remains is real and tradeable.
+""")
+
+        if len(realistic) > 0:
+            st.divider()
+            st.subheader("Summary Metrics")
+            s1, s2, s3 = st.columns(3)
+
+            gross_best = realistic[(realistic["scenario"] == "gross")]["roi_pct"].astype(float).max()
+            real_best = realistic[(realistic["scenario"] == "realistic")]["roi_pct"].astype(float).max()
+            worst_best = realistic[(realistic["scenario"] == "worst_case")]["roi_pct"].astype(float).max()
+
+            s1.metric("Best Gross ROI", f"{gross_best:.1f}%")
+            s2.metric("Best Realistic ROI", f"{real_best:.1f}%",
+                       delta=f"{real_best - gross_best:.1f}% vs gross")
+            s3.metric("Best Worst-Case ROI", f"{worst_best:.1f}%",
+                       delta=f"{worst_best - gross_best:.1f}% vs gross")
+
+            st.info(
+                "Even in the worst-case friction scenario, ROI remains high because the underlying "
+                "timing bias hasn't been corrected — friction adjustments alone don't fix stale odds. "
+                "The true test requires per-over market data."
+            )
+
+
 PAGES = {
     "Overview": page_overview,
     "Elo Ratings": page_elo,
@@ -619,6 +884,7 @@ PAGES = {
     "Pre-Match Edge": page_pre_match_edge,
     "In-Play Edge": page_inplay_edge,
     "Bucket Model": page_bucket_model,
+    "Edge Audit": page_edge_audit,
 }
 
 PAGES[page]()

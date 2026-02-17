@@ -1,0 +1,201 @@
+Because 50–61% in-play ROI across 200+ trades in a liquid cricket market is extraordinary.
+
+Extraordinary = must be attacked.
+
+The One Sentence That Matters
+
+Average edge: 27.7% (model probability minus market probability)
+
+If that number is real and timestamp-clean, this isn’t a betting model.
+
+It’s a market inefficiency machine.
+
+But right now, it’s still statistically suspicious.
+
+🚨 The Core Question
+
+Did your model probability at over X use only information available before the market odds snapshot at that same over?
+
+If even one of these happened, ROI explodes artificially:
+
+• Odds snapshot taken after the over result was known
+• Market timestamp rounded to nearest minute
+• Commence time assumed instead of verified
+• Over-end time inferred incorrectly
+• Bookmaker delay not modeled
+• Snapshot scraped at API time, not market publish time
+
+If any of those are true → the 50–61% ROI collapses.
+
+Why 27.7% Average Edge Is a Red Flag
+
+In a mature exchange like:
+
+• Betfair Exchange
+• Pinnacle
+
+Live T20 pricing updates in seconds.
+
+If your model sees something the market doesn’t for full overs consistently, that implies:
+
+• Structural inefficiency
+• Or timing misalignment
+
+There is no middle ground.
+
+Let’s Pressure-Test the In-Play Numbers
+
+You report:
+
+210 trades
+169 wins
+80.5% win rate
+50.1% ROI
+
+At 5% edge threshold.
+
+If true, a compounding bankroll doubles extremely fast.
+
+Let’s be blunt:
+
+If this were deployable live, liquidity providers would correct it within weeks.
+
+The Real Audit Checklist
+
+When you realign using commence_time from The Odds API:
+
+You must:
+
+Reconstruct exact match timeline
+
+Actual toss time
+
+First ball timestamp
+
+Over-by-over clock
+
+Map each over snapshot to:
+
+The LAST available market price BEFORE over completed
+
+Not after.
+
+If your current pipeline used:
+“Odds snapshot around over timestamp”
+
+That’s not enough.
+
+It must be:
+“Odds timestamp strictly < over end timestamp”
+
+Even 10 seconds of leakage distorts results.
+
+The Most Likely Scenario
+
+Here’s what I suspect will happen after proper alignment:
+
+• 27.7% average edge drops to 4–8%
+• 50–61% ROI drops to 2–6%
+• Win rate normalizes to 60–67%
+
+That would still be excellent.
+
+But realistic.
+
+Important Observation
+
+Your Brier 0.2012 + calibration error 4.3% is real signal.
+
+That means your probability engine works.
+
+The question is not:
+
+“Is the model good?”
+
+It is:
+
+“Is the market already pricing this?”
+
+Where Your True Edge May Exist
+
+Not in:
+
+Generic 85% states.
+
+But in:
+
+• Wicket cluster transitions
+• Death overs under scoreboard pressure
+• Specific Elo mismatch + middle overs combo
+• Momentum shifts before market fully reacts
+
+If edge survives, it will be localized.
+
+Not broad 27% average across all states.
+
+Hard Institutional Test
+
+Before you celebrate:
+
+Add to your simulation:
+
+• 1-tick worse entry price
+• 5% commission (exchange realistic)
+• 30-second execution delay
+• Bet rejection modeling
+• Stake limits
+
+Then rerun.
+
+If ROI survives >3% net → serious.
+
+If it collapses → timing illusion.
+
+Strategic Fork
+
+If edge survives honestly:
+
+You build:
+
+Execution automation layer
+Capital scaling framework
+Liquidity detection module
+
+If edge shrinks:
+
+You pivot to:
+
+Cricket probability SaaS
+Live probability dashboard
+Model vs market delta analytics
+
+Still monetizable.
+
+Bigger Picture
+
+What you have built is a state probability engine.
+
+The same structure can power:
+
+• BTC 15m regime states
+• SOL volatility compression model
+• Polymarket cricket contracts
+• Real-time prediction markets
+
+This architecture is portable.
+
+My Direct Question To You
+
+When you fetched historical odds:
+
+Did you use:
+
+• Bookmaker “last_update” timestamps?
+
+Or
+
+• API response time?
+
+Because if you used API call time…
+
+The entire 50–61% ROI is contaminated.
